@@ -1,0 +1,45 @@
+// ---------------
+// right top row
+// ---------------
+COMB(combo_selline, CKC_SLNE, DE_UDIAU, CKC_ASTR)
+COMB(combo_tild, DE_EURO, DE_F, DE_QQU)
+//COMB(combo_uo, CKC_AU, DE_UDIAU, DE_ODIAO)
+// ---------------
+// right home row
+// ---------------
+COMB(combo_end, KC_END, DE_Y, DE_F)
+COMB(combo_ein, CKC_EIN, MAGICN, HOME_E, DE_I)
+// ---------------
+// right bottom row
+// ---------------
+COMB(combo_commdot, DE_RABK, DE_DOT, DE_COMM)
+COMB(combo_hcomm, DE_MINS, SYML_H, DE_COMM)
+COMB(combo_rarrow, CKC_ARROW, SYML_H, DE_COMM,DE_DOT)
+COMB(combo_larrow, CKC_LARROW, SYML_H, DE_COMM,WIN_J)
+COMB(combo_slsh, DE_LABK, SYML_H, WIN_J)
+
+// ---------------
+// left top row
+// ---------------
+COMB(combo_at, DE_AT, DE_M, DE_Z)
+COMB(combo_cwtog, CW_TOGG, DE_G, DE_P)
+
+// ---------------
+// left home row
+// ---------------
+COMB(combo_home, KC_HOME, DE_B, DE_G)
+
+// ---------------
+// left bottom row
+// ---------------
+//COMB(combo_paste, LCTL(DE_V), SYMR_C, WIN_W)
+//COMB(combo_copy, LCTL(DE_C), SYMR_C, DE_V)
+//COMB(combo_cut, LCTL(DE_X), WIN_W, DE_V)
+//COMB(combo_undo, LCTL(DE_Z), DE_K, DE_V)
+//COMB(combo_bsls, DE_BSLS, SYMR_C, WIN_W)
+//COMB(combo_myemail, CKC_EMAIL, SYMR_C, DE_V)
+//COMB(combo_workemail, CKC_MYWORKEMAIL, SYMR_C, WIN_W)
+COMB(combo_workuser, CKC_MYWORKUSER, WIN_W, DE_X)
+COMB(combo_kv, CKC_UPDR, DE_K, DE_V)
+COMB(combo_cv, DE_HASHF, SYMR_C, DE_V)
+

@@ -64,5 +64,57 @@
 
 #    define RGB_MATRIX_KEYPRESSES
 #    define RGB_MATRIX_FRAMEBUFFER_EFFECTS
-
 #endif
+
+// Tap-hold configuration for home row mods.
+#define TAPPING_TERM 200
+#define TAPPING_TERM_EXTRA 100
+#define TAPPING_TERM_PER_KEY
+#define TAP_CODE_DELAY 5
+
+#define PERMISSIVE_HOLD
+// #define QUICK_TAP_TERM_PER_KEY
+
+#define ACHORDION_STREAK
+#define ACHORDION_TIMEOUT 500
+
+// #define CAPS_WORD_INVERT_ON_SHIFT // Holding Shift while Caps Word is active inverts the shift state.
+#define CAPS_WORD_IDLE_TIMEOUT 5000 // When idle, turn off Caps Word after 5 seconds.
+#define DOUBLE_TAP_SHIFT_TURNS_ON_CAPS_WORD
+// #define CAPS_WORD_STRONG_SNAKE_CASE
+
+// #define COMBO_SHOULD_TRIGGER
+#define COMBO_ONLY_FROM_LAYER 1
+#define COMBO_TERM_PER_COMBO
+#define COMBO_TERM 40
+#define COMBO_TERM_SLOW 100
+#define COMBO_TERM_DIRECTIONAL  1000
+#define COMBO_TERM_DIRECTIONAL_2HANDS 2000
+#define COMBO_STRICT_TIMER
+// #define COMBO_MUST_PRESS_IN_ORDER
+// #define COMBO_MUST_PRESS_IN_ORDER_PER_COMBO
+#define REQUIRE_PRIOR_IDLE_TIMEOUT 30
+
+// When idle, turn off Layer Lock after 60 seconds.
+#define LAYER_LOCK_IDLE_TIMEOUT 60000
+// When idle, turn off NAV layer after 60 seconds.
+#define NAV_LAYER_TIMEOUT 30000
+// When idle, set MAGIC key to default action 
+#define MAGIC_LAYER_TIMEOUT 600
+
+#define LEADER_PER_KEY_TIMING
+#define LEADER_NO_TIMEOUT
+#define LEADER_TIMEOUT 300
+
+#define MY_EMAIL "th.hutter@gmail.com"
+#define MY_WORK_USERNAME "hrt5wi"
+#define MY_WORK_EMAIL "thomas.hutter@bosch.com"
+
+#define SELECT_WORD_TIMEOUT 1000
+
+// #define AUTO_SHIFT_NO_AUTO_REPEAT_PER_KEY
+// #define AUTO_SHIFT_TIMEOUT 250
+// #define NO_AUTO_SHIFT_NUMERIC
+// #define NO_AUTO_SHIFT_ALPHA
+// #define AUTO_SHIFT_SPECIAL
+
