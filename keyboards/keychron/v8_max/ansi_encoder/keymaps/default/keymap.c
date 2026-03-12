@@ -76,6 +76,7 @@ enum layers {
 #define CHASH   C(DE_HASH)
 #define NDIFF   C(S(DE_N))
 #define PDIFF   C(S(DE_P))
+#define SWVD    C(G(KC_RGHT))
 
 // LAYER TAP SPECIAL KEYS 
 #define DE_ADIAA LT(0, DE_A)
@@ -514,13 +515,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______,  _______,  _______, _______, _______, _______,            DE_F1F,   DE_F2F,   DE_F3F,   DE_F4F,  DE_F5F,  DE_F6F,               KC_BSPC,             KC_ENT,
         _______, _______,  DUPLINE,  BOLD,    ITAL,    UNDR,                        XXXXXXX,  XXXXXXX,  KC_HOME,  KC_UP,   KC_END,  CTXTMNU,    _______,  _______,             _______,
         _______, KC_LWIN,  KC_LCTL,  KC_LSFT, KC_LCTL, PDIFF,                       XXXXXXX,  KC_PGUP,  KC_LEFT,  KC_DOWN, KC_RGHT, KC_DEL,                _______,             _______,
-        KC_LSFT,           BKM_LST,  BKM_TOG, KC_ESC,  NDIFF,   _______,    _______,XXXXXXX,  KC_PGDN,  CKC_SWBK,  CKC_SLNE, CKC_SWFD, XXXXXXX,                       _______,
+        KC_LSFT,           BKM_LST,  BKM_TOG, KC_ESC,  NDIFF,   _______,    _______,XXXXXXX,  KC_PGDN,  CKC_SWBK,  CKC_SLNE, CKC_SWFD, SWVD,                       _______,
         _______, _______,            _______,          _______, _______,              CKC_LLCK,           CKC_LLCK,           _______,                      _______,  _______,   _______),        
        
     [SYMR] = LAYOUT_ansi_69(       
-       _______, DE_EXLM,  DE_DQUO,  DE_EURO, DE_DLR,  DE_PERC, DE_SECT,              _______,  CKC_CIRC, DE_RCBR, DE_RBRC, DE_DLR,  CKC_GRV,            _______,             RGB_TOG,
-       _______, CKC_CIRC, DE_LABK,  DE_MINS, DE_RABK, DE_PIPE,                       _______,  DE_PIPE,  DE_LCBR, DE_LBRC, DE_AT,   DE_TILD,    DE_PERC,  DE_EXLM,             QK_BOOT,
-       _______, DE_TILD,  DE_SS,    DE_PLUS, LTEQL,   DE_AMPR,                       _______,  DE_AMPR,  DE_LPRN, DE_RPRN, LTEQL,   DE_QUOT,            _______,             _______,
+       _______, DE_EXLM,  DE_DQUO,  DE_EURO, DE_DLR,  DE_PERC, DE_SECT,              BT_HST1,  CKC_CIRC, DE_RCBR, DE_RBRC, DE_DLR,  CKC_GRV,            _______,             RGB_TOG,
+       _______, CKC_CIRC, DE_LABK,  DE_MINS, DE_RABK, DE_PIPE,                       BT_HST2,  DE_PIPE,  DE_LCBR, DE_LBRC, DE_AT,   DE_TILD,    DE_PERC,  DE_EXLM,             QK_BOOT,
+       _______, DE_TILD,  DE_SS,    DE_PLUS, LTEQL,   DE_AMPR,                       BT_HST3,  DE_AMPR,  DE_LPRN, DE_RPRN, LTEQL,   DE_QUOT,            _______,             _______,
        _______,           XXXXXXX,  CKC_GRV,  DE_BSLS, DE_SLSH, DE_MICR,     _______,DE_MICR,  DE_BSLS,  DE_SLSH, DE_SCLN, DE_COLN, DE_DQUO,            _______,
        _______, _______,            _______,      TG(WIN_FN1), TG(WIN_FN1),          _______,            DE_HASH,           _______,                       _______, _______,   _______),
       
