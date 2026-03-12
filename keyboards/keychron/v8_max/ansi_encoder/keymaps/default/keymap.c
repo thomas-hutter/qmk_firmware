@@ -341,7 +341,7 @@ void leader_end_user(void) {
     //else if (leader_sequence_two_keys(DE_D, DE_H)) { SEND_STRING("please don't hesitate to contact me if you "); }
     // E
     // F
-    else if (leader_sequence_one_key(DE_F)) { tap_code16(DE_F);tap_code16(DE_UDIA);tap_code16(DE_R); }
+    // else if (leader_sequence_one_key(DE_F)) { tap_code16(DE_F);tap_code16(DE_UDIA);tap_code16(DE_R); }
     // G
     else if (leader_sequence_one_key(DE_G)) { SEND_STRING("guten Morgen "); }
     else if (leader_sequence_two_keys(DE_G, DE_G)) { SEND_STRING("einen wundersch"); tap_code16(DE_ODIA); SEND_STRING("nen guten Morgen ");   }
@@ -367,12 +367,10 @@ void leader_end_user(void) {
     else if (leader_sequence_two_keys(DE_P, DE_G)) { SEND_STRING("progress "); }
     // Q (not feasible since QU)
     // else if (leader_sequence_one_key(DE_Q)) { SEND_STRING("question"); }
-    // else if (leader_sequence_two_keys(DE_Q, DE_U)) { SEND_STRING("I have a question regarding "); }
     // R
     else if (leader_sequence_one_key(DE_R)) { SEND_STRING("requirement"); }
     else if (leader_sequence_two_keys(DE_R, DE_S)) { SEND_STRING("responsible"); }
     else if (leader_sequence_two_keys(DE_R, DE_R)) { SEND_STRING("(0x|0X)?[a-fA-F0-9]+"); }
-    // else if (leader_sequence_three_keys(DE_R, DE_R, DE_R)) { SEND_STRING("(^\\d+\\s+\\d+:\\d+-\\d+\\s+)|(Found \\d+ occurrences)|(Searching for .*)"); }
     // S
     else if (leader_sequence_one_key(DE_S)) { SEND_STRING("Sehr geehrter Herr "); }
     else if (leader_sequence_two_keys(DE_S, DE_S)) { SEND_STRING("Sehr geehrte Damen und Herren,"); tap_code(KC_ENT); tap_code(KC_ENT); }
@@ -601,22 +599,6 @@ static bool process_tap_or_long_press_key(
 
 
 // *************************************************************************************
-// WINDOWS TEXTSUGGESTION 
-// select one of three suggestions from a menu above the cursor 
-// *************************************************************************************
-// bool text_suggestion_trigger(uint8_t mods)
-// {
-//     clear_oneshot_mods();  // remove mods
-//     unregister_mods(MOD_MASK_CSAG);
-//     tap_code(KC_UP);
-//     if ((mods) & MOD_MASK_SHIFT){ tap_code(KC_RIGHT);}
-//     if ((mods) & MOD_MASK_CTRL) { tap_code(KC_RIGHT); tap_code(KC_RIGHT);}
-//     tap_code(KC_ENT);
-    
-//     return false; // Skip default handling.
-// }
-
-// *************************************************************************************
 // COMBOS: require prior idle and term per combo
 // *************************************************************************************
 // static uint16_t require_prior_idle_timer = 0;
@@ -749,47 +731,6 @@ static void process_magicn(uint16_t keycode, uint8_t mods) {
       default: MAGIC_STRING("n", DE_N); 
     }
 }
-
-// static void process_magicl(uint16_t keycode, uint8_t mods) {
-//     uint8_t oneshot_mods = get_oneshot_mods();
-  
-//     switch (keycode) {
-//           case DE_M:
-//           case MAGICM:
-//               unregister_mods(MOD_MASK_CSAG);    
-//               tap_code(KC_BSPC);            
-//               if ((mods | oneshot_mods) & MOD_MASK_SHIFT) {
-//                   MAGIC_STRING("Zu", DE_Q);
-//               } else {
-//                   MAGIC_STRING("zu", DE_Q);
-//               }
-//               break;
-//           default:
-//               MAGIC_STRING("l", DE_L);
-//               if(oneshot_mods & MOD_MASK_SHIFT) {set_last_mods(MOD_BIT(KC_LSFT));}
-//               break;
-//       }
-// }
-
-// static void process_magicm(uint16_t keycode, uint8_t mods) {
-//     uint8_t oneshot_mods = get_oneshot_mods();
-//     switch (keycode) {
-//           case DE_L:
-//           case MAGICL:
-//               unregister_mods(MOD_MASK_CSAG);    
-//               tap_code(KC_BSPC);           
-//               if ((mods | oneshot_mods) & MOD_MASK_SHIFT) {
-//                   MAGIC_STRING("Tz", DE_Q);
-//               } else {
-//                   MAGIC_STRING("tz", DE_Q);
-//               }
-//               break;
-//           default:
-//               MAGIC_STRING("m", DE_M);
-//               if(oneshot_mods & MOD_MASK_SHIFT) {set_last_mods(MOD_BIT(KC_LSFT));}
-//               break;
-//       }
-// }
 
 static void process_magico(uint16_t keycode, uint8_t mods) {
     uint8_t oneshot_mods = get_oneshot_mods();
@@ -1015,25 +956,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case HOMEND:    return process_tap_or_long_press_key(record, KC_END); break; 
         // case TABENT:    return process_tap_or_long_press_key(record, KC_ENT); break; 
 
-
-        // case MAGICL:
-        //   if (record->tap.count > 0) {    // Key is being tapped.
-        //       if (record->event.pressed) { process_magicl(get_last_keycode(), get_last_mods());} 
-        //       else {}    // Handle tap release event...
-        //     } else {                        // Key is being held.
-        //         if (record->event.pressed) { tap_code16(DE_L);} 
-        //         else {}// Handle hold release event...
-        //     } 
-        //     return false;  // Skip default handling
-        // case MAGICM:
-        //   if (record->tap.count > 0) {    // Key is being tapped.
-        //       if (record->event.pressed) { process_magicm(get_last_keycode(), get_last_mods());} 
-        //       else {}    // Handle tap release event...
-        //     } else {                        // Key is being held.
-        //         if (record->event.pressed) { tap_code16(DE_M);} 
-        //         else {}// Handle hold release event...
-        //     } 
-        //     return false;  // Skip default handling
         case MAGICO:
             if (record->tap.count > 0) {    // Key is being tapped.
               if (record->event.pressed) { process_magico(get_last_keycode(), get_last_mods());} 
@@ -1177,16 +1099,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         //   if (is_caps_word_on()) { tap_code16(DE_UNDS); return false; } // change caps word to strong snake case
         //   #endif // CAPS_WORD_STRONG_SNAKE_CASE
         //   break;
-        // case TXTSGST:   return text_suggestion_trigger((mods | oneshot_mods));
-        // VSCode Bookmarks 
-        // case BKM_NAV:   
-        //   if ((mods | oneshot_mods) & MOD_MASK_SHIFT) {
-        //     clear_oneshot_mods();  // Temporarily disable mods.
-        //     unregister_mods(MOD_MASK_CSAG);
-        //     tap_code16(C(A(DE_P)));
-        //     register_mods(mods);  // Restore mods.
-        //   } else { tap_code16(C(A(DE_N))); }
-        //   return false;
         case CKC_AU:      
           clear_oneshot_mods();  // Temporarily disable mods.
           unregister_mods(MOD_MASK_CSAG);  
@@ -1235,15 +1147,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else { SEND_STRING("ein"); }
           register_mods(mods);  // Restore mods.  
           break;         
-        // case CKC_ST:      
-        //   clear_oneshot_mods();  // Temporarily disable mods.
-        //   unregister_mods(MOD_MASK_CSAG);  
-        //   if ((mods | oneshot_mods) & MOD_MASK_SHIFT) {
-        //       SEND_STRING("St");
-        //     } else { SEND_STRING("st"); }
-        //   register_mods(mods);  // Restore mods.  
-        //   layer_off(SYML);
-        //   return false;
       }      
     }
     return true;
