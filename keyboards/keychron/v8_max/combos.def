@@ -21,7 +21,7 @@ COMB(combo_slsh, DE_LABK, SYML_H, WIN_J)
 // ---------------
 // left top row
 // ---------------
-COMB(combo_at, DE_AT, DE_M, DE_Z)
+COMB(combo_at, SWVD, DE_M, DE_Z)
 COMB(combo_cwtog, CW_TOGG, DE_G, DE_P)
 
 // ---------------
