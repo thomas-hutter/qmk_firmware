@@ -107,6 +107,7 @@
 #define LEADER_TIMEOUT 300
 
 #define MY_EMAIL "th.hutter@gmail.com"
+#define MY_PRIVATE_EMAIL "th.hutter@proton.me"
 #define MY_WORK_USERNAME "hrt5wi"
 #define MY_WORK_EMAIL "thomas.hutter@bosch.com"
 

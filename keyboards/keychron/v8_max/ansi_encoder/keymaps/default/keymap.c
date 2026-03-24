@@ -346,8 +346,8 @@ void leader_end_user(void) {
     else if (leader_sequence_one_key(DE_G)) { SEND_STRING("guten Morgen "); }
     else if (leader_sequence_two_keys(DE_G, DE_G)) { SEND_STRING("einen wundersch"); tap_code16(DE_ODIA); SEND_STRING("nen guten Morgen ");   }
     // I
-    else if (leader_sequence_one_key(DE_I)) { SEND_STRING("information"); }
-    else if (leader_sequence_two_keys(DE_I, DE_I)) { SEND_STRING("192.168."); }
+    else if (leader_sequence_one_key(DE_I)) { SEND_STRING("192.168."); }
+    else if (leader_sequence_two_keys(DE_I, DE_I)) { SEND_STRING("information"); }
     // H
     // else if (leader_sequence_one_key(DE_H)) { tap_code16(DE_H); tap_code16(DE_ADIA); SEND_STRING("tte"); }
     // K
@@ -362,9 +362,8 @@ void leader_end_user(void) {
     else if (leader_sequence_one_key(DE_O)) { tap_code16(DE_ODIA); SEND_STRING("sterreich"); }
     // else if (leader_sequence_two_keys(DE_O, DE_F)) { tap_code16(DE_ODIA); SEND_STRING("ffentlich"); }
     // P
-    else if (leader_sequence_one_key(DE_P)) { SEND_STRING("problem"); }
-    else if (leader_sequence_two_keys(DE_P, DE_P)) { SEND_STRING("programm"); }
-    else if (leader_sequence_two_keys(DE_P, DE_G)) { SEND_STRING("progress "); }
+    else if (leader_sequence_one_key(DE_P)) { SEND_STRING(MY_EMAIL); }
+    else if (leader_sequence_two_keys(DE_P, DE_P)) { SEND_STRING(MY_PRIVATE_EMAIL); }
     // Q (not feasible since QU)
     // else if (leader_sequence_one_key(DE_Q)) { SEND_STRING("question"); }
     // R
@@ -514,14 +513,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______,  DUPLINE,  BOLD,    ITAL,    UNDR,                        XXXXXXX, C(KC_HOME), KC_HOME, KC_UP,   KC_END,  C(KC_END),    _______,  _______,             _______,
         _______, KC_LWIN,  KC_LCTL,  KC_LSFT, KC_LCTL, PDIFF,                       XXXXXXX,  KC_PGUP,  KC_LEFT,  KC_DOWN, KC_RGHT, KC_DEL,                _______,             _______,
         KC_LSFT,           BKM_LST,  BKM_TOG, KC_ESC,  NDIFF,   _______,    _______,XXXXXXX,  KC_PGDN, C(KC_LEFT),CKC_SLNE,C(KC_RIGHT),SWVD,                       _______,
-        _______, _______,            _______,          _______, _______,              CKC_LLCK,           CKC_LLCK,           _______,                      _______,  _______,   _______),        
+        _______, _______,            _______,          CKC_LLCK,CKC_LLCK,              CKC_LLCK,           _______,           _______,                      _______,  _______,   _______),        
        
     [SYMR] = LAYOUT_ansi_69(       
-       _______, DE_EXLM,  DE_DQUO,  DE_EURO, DE_DLR,  DE_PERC, DE_SECT,              BT_HST1,  CKC_CIRC, DE_RCBR, DE_RBRC, DE_DLR,  CKC_GRV,            _______,             RGB_TOG,
-       _______, CKC_CIRC, DE_LABK,  DE_MINS, DE_RABK, DE_PIPE,                       BT_HST2,  DE_PIPE,  DE_LCBR, DE_LBRC, DE_AT,   DE_TILD,    DE_PERC,  DE_EXLM,             QK_BOOT,
+       _______, DE_EXLM,  DE_DQUO,  DE_EURO, DE_DLR,  DE_PERC, DE_SECT,              BT_HST1,  CKC_CIRC,  DE_RCBR, DE_RBRC, DE_DLR, CKC_GRV,           _______,             RGB_TOG,
+       _______, CKC_CIRC, DE_LABK,  DE_MINS, DE_RABK, DE_PIPE,                       BT_HST2,  DE_PIPE,  DE_LCBR, DE_LBRC, DE_HASH, DE_TILD,    DE_PERC,  DE_EXLM,             QK_BOOT,
        _______, DE_TILD,  DE_SS,    DE_PLUS, LTEQL,   DE_AMPR,                       BT_HST3,  DE_AMPR,  DE_LPRN, DE_RPRN, LTEQL,   DE_QUOT,            _______,             _______,
        _______,           XXXXXXX,  CKC_GRV,  DE_BSLS, DE_SLSH, DE_MICR,     _______,DE_MICR,  DE_BSLS,  DE_SLSH, DE_SCLN, DE_COLN, DE_DQUO,            _______,
-       _______, _______,            _______,      TG(WIN_FN1), TG(WIN_FN1),          _______,            DE_HASH,           _______,                       _______, _______,   _______),
+       _______, _______,            _______,      TG(WIN_FN1), TG(WIN_FN1),          TG(WIN_FN1),            DE_MINS,           _______,                       _______, _______,   _______),
       
     // [SYML] = LAYOUT_ansi_69(       
     //      _______, DE_EXLM,  DE_DQUO,  DE_EURO, DE_DLR,  DE_PERC, DE_SECT,            _______,  _______,  _______, _______,  _______,  _______,            _______,             RGB_TOG,
@@ -637,7 +636,10 @@ uint16_t get_combo_term(uint16_t index, combo_t *combo) {
         //   break;  
         case C_combo_ein: 
         case C_combo_rarrow:
-        case C_combo_larrow:        
+        case C_combo_larrow:
+        case C_combo_at:
+        case C_combo_commdot:
+        case C_combo_slsh:
           return COMBO_TERM_SLOW*4; 
         default: return COMBO_TERM_SLOW;
     }    

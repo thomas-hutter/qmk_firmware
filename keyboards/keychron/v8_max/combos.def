@@ -21,7 +21,7 @@ COMB(combo_slsh, DE_LABK, SYML_H, WIN_J)
 // ---------------
 // left top row
 // ---------------
-COMB(combo_at, SWVD, DE_M, DE_Z)
+COMB(combo_at, DE_AT, DE_M, DE_Z)
 COMB(combo_cwtog, CW_TOGG, DE_G, DE_P)
 
 // ---------------
@@ -39,7 +39,7 @@ COMB(combo_home, KC_HOME, DE_B, DE_G)
 //COMB(combo_bsls, DE_BSLS, SYMR_C, WIN_W)
 //COMB(combo_myemail, CKC_EMAIL, SYMR_C, DE_V)
 //COMB(combo_workemail, CKC_MYWORKEMAIL, SYMR_C, WIN_W)
-COMB(combo_workuser, CKC_MYWORKUSER, WIN_W, DE_X)
-COMB(combo_kv, CKC_UPDR, DE_K, DE_V)
+//COMB(combo_workuser, CKC_MYWORKUSER, WIN_W, DE_X)
+//COMB(combo_kv, CKC_UPDR, DE_K, DE_V)
 COMB(combo_cv, DE_HASHF, SYMR_C, DE_V)
 
