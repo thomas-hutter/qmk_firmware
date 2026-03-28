@@ -516,7 +516,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______,            _______,          CKC_LLCK,CKC_LLCK,              CKC_LLCK,           _______,           _______,                      _______,  _______,   _______),        
        
     [SYMR] = LAYOUT_ansi_69(       
-       _______, DE_EXLM,  DE_DQUO,  DE_EURO, DE_DLR,  DE_PERC, DE_SECT,              BT_HST1,  CKC_CIRC,  DE_RCBR, DE_RBRC, DE_DLR, CKC_GRV,           _______,             RGB_TOG,
+       _______, DE_EXLM,  DE_DQUO,  DE_EURO, DE_DLR,  DE_PERC, DE_SECT,              BT_HST1,  CKC_CIRC,  DE_RCBR, DE_RBRC, DE_DLR, CKC_GRV,           _______,             KC_MUTE,
        _______, CKC_CIRC, DE_LABK,  DE_MINS, DE_RABK, DE_PIPE,                       BT_HST2,  DE_PIPE,  DE_LCBR, DE_LBRC, DE_HASH, DE_TILD,    DE_PERC,  DE_EXLM,             QK_BOOT,
        _______, DE_TILD,  DE_SS,    DE_PLUS, LTEQL,   DE_AMPR,                       BT_HST3,  DE_AMPR,  DE_LPRN, DE_RPRN, LTEQL,   DE_QUOT,            _______,             _______,
        _______,           XXXXXXX,  CKC_GRV,  DE_BSLS, DE_SLSH, DE_MICR,     _______,DE_MICR,  DE_BSLS,  DE_SLSH, DE_SCLN, DE_COLN, DE_DQUO,            _______,
@@ -548,7 +548,7 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
     [FUN] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN)},
     [NAV] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN)},
     // [SYML] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN)},
-    [SYMR] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN)},
+    [SYMR] = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
 };
 #endif // ENCODER_MAP_ENABLE
 
