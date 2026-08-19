@@ -516,7 +516,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______,            _______,          CKC_LLCK,CKC_LLCK,              CKC_LLCK,           _______,           _______,                      _______,  _______,   _______),        
        
     [SYMR] = LAYOUT_ansi_69(       
-       _______, DE_EXLM,  DE_DQUO,  DE_EURO, DE_DLR,  DE_PERC, DE_SECT,              BT_HST1,  CKC_CIRC,  DE_RCBR, DE_RBRC, DE_DLR, CKC_GRV,           _______,             KC_MUTE,
+       _______, DE_EXLM,  DE_DQUO,  DE_EURO, DE_DLR,  DE_PERC, DE_SECT,              BT_HST1,  CKC_CIRC, DE_RCBR, DE_RBRC, DE_DLR,  CKC_GRV,           _______,             KC_MUTE,
        _______, CKC_CIRC, DE_LABK,  DE_MINS, DE_RABK, DE_PIPE,                       BT_HST2,  DE_PIPE,  DE_LCBR, DE_LBRC, DE_HASH, DE_TILD,    DE_PERC,  DE_EXLM,             QK_BOOT,
        _______, DE_TILD,  DE_SS,    DE_PLUS, LTEQL,   DE_AMPR,                       BT_HST3,  DE_AMPR,  DE_LPRN, DE_RPRN, LTEQL,   DE_QUOT,            _______,             _______,
        _______,           XXXXXXX,  CKC_GRV,  DE_BSLS, DE_SLSH, DE_MICR,     _______,DE_MICR,  DE_BSLS,  DE_SLSH, DE_SCLN, DE_COLN, DE_DQUO,            _______,
@@ -530,8 +530,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //      _______, _______,            _______,      TG(WIN_FN1), TG(WIN_FN1),        _______,           _______,           _______,                       _______, _______,   _______),
            
     [WIN_FN1] = LAYOUT_ansi_69(       
-      KC_ESC,  KC_BRID,  KC_BRIU,  KC_TASK, KC_FILE, RGB_VAD, RGB_VAI,            KC_MPRV,  KC_MPLY,  KC_MNXT, KC_MUTE,  KC_VOLD,  KC_VOLU,            _______,             QK_BOOT,
-      _______, BT_HST1,  BT_HST2,  BT_HST3, P2P4G,   _______,                     _______,  _______,  _______, _______,  _______,  _______,  _______,  _______,             _______,
+      KC_ESC,  KC_BRID,  KC_BRIU,  KC_TASK, KC_FILE, RGB_VAD, RGB_VAI,            KC_MPRV,  KC_MPLY,  KC_MNXT, KC_MUTE,  KC_VOLD,  KC_VOLU,            _______,             RGB_TOG,
+      _______, BT_HST1,  BT_HST2,  BT_HST3, P2P4G,   _______,                     _______,  _______,  _______, _______,  _______,  _______,  _______,  _______,             QK_BOOT,
       RGB_TOG, RGB_MOD,  RGB_VAI,  RGB_HUD, RGB_SAI, RGB_SPI,                     _______,  _______,  _______, _______,  _______,  _______,            _______,             KC_END,
       _______,           RGB_RMOD, RGB_VAD, RGB_HUI, RGB_SAD, RGB_SPD,            RGB_SPD,  NK_TOGG,  _______, _______,  _______,  _______,  _______,            _______,
       _______, _______,            _______,          TG(WIN_FN1), TG(WIN_FN1),            _______,            _______,           _______,                      _______,  _______,   _______),
