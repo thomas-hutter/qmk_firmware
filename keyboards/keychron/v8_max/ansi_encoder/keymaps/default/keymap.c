@@ -477,7 +477,7 @@ bool achordion_chord(uint16_t tap_hold_keycode,
 
 #endif  // ACHORDION_ENABLE
 
-// KC_BSPC LS_X
+// KC_BSPC LS_X KC_PGUP KC_PGDN
 // clang-format off   
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [MAC_BASE] = LAYOUT_ansi_69(
@@ -511,8 +511,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [NAV] = LAYOUT_ansi_69(        
         _______, _______,  _______,  _______, _______, _______, _______,            DE_F1F,   DE_F2F,   DE_F3F,   DE_F4F,  DE_F5F,  DE_F6F,               KC_BSPC,             KC_ENT,
         _______, _______,  DUPLINE,  BOLD,    ITAL,    UNDR,                        XXXXXXX, C(KC_HOME), KC_HOME, KC_UP,   KC_END,  C(KC_END),    _______,  _______,             _______,
-        _______, KC_LWIN,  KC_LCTL,  KC_LSFT, KC_LCTL, PDIFF,                       XXXXXXX,  KC_PGUP,  KC_LEFT,  KC_DOWN, KC_RGHT, KC_DEL,                _______,             _______,
-        KC_LSFT,           BKM_LST,  BKM_TOG, KC_ESC,  NDIFF,   _______,    _______,XXXXXXX,  KC_PGDN, C(KC_LEFT),CKC_SLNE,C(KC_RIGHT),SWVD,                       _______,
+        _______, KC_LWIN,  KC_LALT,  KC_LSFT, KC_LCTL, PDIFF,                       XXXXXXX,  KC_BSPC,  KC_LEFT,  KC_DOWN, KC_RGHT, KC_DEL,                _______,             _______,
+        KC_LSFT,           BKM_LST,  BKM_TOG, KC_ESC,  NDIFF,   _______,    _______,XXXXXXX,  CKC_SWBK, C(KC_LEFT),CKC_SLNE,C(KC_RIGHT),CKC_SWFD,                       _______,
         _______, _______,            _______,          CKC_LLCK,CKC_LLCK,              CKC_LLCK,           _______,           _______,                      _______,  _______,   _______),        
        
     [SYMR] = LAYOUT_ansi_69(       
