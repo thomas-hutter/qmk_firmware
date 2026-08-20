@@ -496,10 +496,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        
     [NUM] = LAYOUT_ansi_69(       
         _______,  _______,  _______,  _______, _______, _______, _______,           S(DE_A),  S(DE_B),  S(DE_C), S(DE_D),  S(DE_E),  S(DE_F),            KC_BSPC,             KC_ENT,
-        _______,  _______,  _______,  _______, _______, _______,                    DE_DLR,   KC_PAST,  DE_7,     DE_8,    DE_9,     KC_PSLS,   DE_PERC,  KC_CALC,              _______,
-        _______,  KC_LWIN,  KC_LALT,  KC_LSFT, KC_LCTL, _______,                    DE_EURO,  KC_PPLS,  DE_1,     DE_2,    DE_3,     DE_0,                     _______,             _______,
-        KC_LSFT,            _______,  _______, CKC_HEX,     CKC_CIRC,_______,  KC_CALC, DE_DOT,   KC_PMNS,  DE_4,     DE_5,    DE_6,     DE_COMM,                        _______,
-        _______, _______,            _______,          CKC_LLCK, CKC_LLCK,                _______,            _______,           KC_SPC,                       _______,  _______,   _______),    
+        _______,  _______,  _______,  _______, _______, _______,                    DE_DLR,   CKC_CIRC, DE_7,     DE_8,    DE_9,     KC_PMNS,   DE_PERC,  CKC_HEX,              _______,
+        _______,  KC_LWIN,  _______,  _______, KC_LWIN, _______,                    DE_EURO,  KC_PAST,  DE_1,     DE_2,    DE_3,     DE_0,                     _______,             _______,
+        KC_LSFT,            _______,  _______, _______, _______,_______,   KC_CALC, DE_DOT,   KC_PSLS,  DE_4,     DE_5,    DE_6,     KC_PPLS,                        _______,
+        _______, _______,            _______,          CKC_LLCK, CKC_LLCK,                DE_DOT,            DE_COMM,           KC_SPC,                       _______,  _______,   _______),    
 
     [FUN] = LAYOUT_ansi_69(       
         _______, KC_F1,    KC_F2,    KC_F3,   KC_F4,   KC_F5, KC_F6,                KC_F7,    KC_F8,    KC_F9,   KC_F10,   KC_F11,    KC_F12,            _______,             RGB_TOG,
@@ -511,9 +511,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [NAV] = LAYOUT_ansi_69(        
         _______, _______,  _______,  _______, _______, _______, _______,            DE_F1F,   DE_F2F,   DE_F3F,   DE_F4F,  DE_F5F,  DE_F6F,               KC_BSPC,             KC_ENT,
         _______, _______,  DUPLINE,  BOLD,    ITAL,    UNDR,                        XXXXXXX, C(KC_HOME), KC_HOME, KC_UP,   KC_END,  C(KC_END),    _______,  _______,             _______,
-        _______, KC_LWIN,  KC_LALT,  KC_LSFT, KC_LCTL, PDIFF,                       XXXXXXX,  KC_BSPC,  KC_LEFT,  KC_DOWN, KC_RGHT, KC_DEL,                _______,             _______,
+        _______, KC_LWIN,  KC_LCTL,  KC_LSFT, KC_LCTL, PDIFF,                       XXXXXXX,  KC_BSPC,  KC_LEFT,  KC_DOWN, KC_RGHT, KC_DEL,                _______,             _______,
         KC_LSFT,           BKM_LST,  BKM_TOG, KC_ESC,  NDIFF,   _______,    _______,XXXXXXX,  CKC_SWBK, C(KC_LEFT),CKC_SLNE,C(KC_RIGHT),CKC_SWFD,                       _______,
-        _______, _______,            _______,          CKC_LLCK,CKC_LLCK,              CKC_LLCK,           _______,           _______,                      _______,  _______,   _______),        
+        _______, _______,            _______,          CKC_LLCK,CKC_LLCK,              _______,           _______,           _______,                      _______,  _______,   _______),        
        
     [SYMR] = LAYOUT_ansi_69(       
        _______, DE_EXLM,  DE_DQUO,  DE_EURO, DE_DLR,  DE_PERC, DE_SECT,              BT_HST1,  CKC_CIRC, DE_RCBR, DE_RBRC, DE_DLR,  CKC_GRV,           _______,             KC_MUTE,
