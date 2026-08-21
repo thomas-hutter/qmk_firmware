@@ -112,6 +112,7 @@ enum layers {
 #define UNREDO   LT(0, KC_UNDO)
 #define FINDF    LT(0, KC_FIND)
 #define CPYCT  LT(0, KC_COPY)
+#define PSTWOF LT(0, KC_PASTE)
 #define BKMKMF LT(0, KC_SCROLL_LOCK)
 
 
@@ -436,6 +437,7 @@ uint16_t achordion_timeout(uint16_t tap_hold_keycode) {
         // case HOME_I:
         case FINDF:
         case CPYCT:
+        case PSTWOF:
         case UNREDO:
         case BKMKMF:
         case OSM_LS:
@@ -488,7 +490,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LCTL, KC_LOPTN,           KC_LCMMD,         KC_SPC,  MO(WIN_FN1),        KC_ENT,             KC_SPC,            KC_RCMMD,                     KC_LEFT,  KC_DOWN,   KC_RGHT),
        
     [WIN_BASE] = LAYOUT_ansi_69(       
-        KC_ESC,  UNREDO,   LC_S,     CPYCT,   LC_V,    FINDF,   KC_ENT,             DE_F1F,   DE_F2F,   DE_F3F,  DE_F4F,   DE_F5F,   DE_F6F,             KC_BSPC,             KC_ENT,
+        KC_ESC,  UNREDO,   LC_S,     CPYCT,   PSTWOF,  FINDF,   KC_ENT,             DE_F1F,   DE_F2F,   DE_F3F,  DE_F4F,   DE_F5F,   DE_F6F,             KC_BSPC,             KC_ENT,
         KC_TAB,  DE_Z,     DE_M,     DE_L,    DE_G,    DE_P,                        TG(FUN),  DE_QQU,   DE_F,    MAGICO,   DE_UDIAU, CKC_ASTR, DE_PLUS,  DE_QUES,             HOMEND,
         KC_BSPC, DE_D,     HOME_S,   HOME_R,  HOME_T,  DE_B,                        CKC_SWBK,  DE_Y,     MAGICN,  HOME_E,   DE_I,   DE_ADIAA,           KC_ENT,              KC_DEL,
         OSM_LS,            DE_K,     DE_V,    SYMR_C,  WIN_W,   DE_X,       BKMKMF, QK_LEAD,  WIN_J,    SYML_H,  DE_COMM,  DE_DOT,   OSM_RS,                      KC_UP,
@@ -1026,6 +1028,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case CPYCT:     
           if ((record->tap.count > 0)&&(record->event.pressed)) { tap_code16(C(DE_C)); } // Key is being tapped.
           else { if (record->event.pressed) { tap_code16(C(DE_X)); } // key is being held
+          } return false;  // Skip default handling
+        case PSTWOF:     
+          if ((record->tap.count > 0)&&(record->event.pressed)) { tap_code16(C(DE_V)); } // Key is being tapped.
+          else { if (record->event.pressed) { tap_code16(S(C(DE_V))); } // key is being held
           } return false;  // Skip default handling
         case BKMKMF:     
           if ((record->tap.count > 0)&&(record->event.pressed)) { tap_code16(A(C(DE_K))); } // Key is being tapped.
