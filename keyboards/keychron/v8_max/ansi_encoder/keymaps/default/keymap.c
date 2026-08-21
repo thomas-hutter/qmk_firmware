@@ -494,7 +494,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,  DE_Z,     DE_M,     DE_L,    DE_G,    DE_P,                        TG(FUN),  DE_QQU,   DE_F,    MAGICO,   DE_UDIAU, CKC_ASTR, DE_PLUS,  DE_QUES,             HOMEND,
         KC_BSPC, DE_D,     HOME_S,   HOME_R,  HOME_T,  DE_B,                        CKC_SWBK,  DE_Y,     MAGICN,  HOME_E,   DE_I,   DE_ADIAA,           KC_ENT,              KC_DEL,
         OSM_LS,            DE_K,     DE_V,    SYMR_C,  WIN_W,   DE_X,       BKMKMF, QK_LEAD,  WIN_J,    SYML_H,  DE_COMM,  DE_DOT,   OSM_RS,                      KC_UP,
-        KC_LCTL, KC_LWIN,            KC_LALT,          OSL(SYMR),DE_UNDS,           KC_TAB,             KC_SPC,            KC_LALT,                       KC_LEFT,  KC_DOWN,   KC_RGHT),
+        KC_LCTL, KC_LWIN,            KC_LALT,          OSL(SYMR),DE_UNDS,           CW_TOGG,             KC_SPC,            KC_LALT,                       KC_LEFT,  KC_DOWN,   KC_RGHT),
        
     [NUM] = LAYOUT_ansi_69(       
         _______,  _______,  _______,  _______, _______, _______, _______,           S(DE_A),  S(DE_B),  S(DE_C), S(DE_D),  S(DE_E),  S(DE_F),            KC_BSPC,             KC_ENT,
