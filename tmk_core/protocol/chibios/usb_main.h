@@ -34,6 +34,8 @@ void usb_start(USBDriver *usbp);
 
 bool send_report(usb_endpoint_in_lut_t endpoint, void *report, size_t size);
 
+bool send_report(usb_endpoint_in_lut_t endpoint, void *report, size_t size);
+
 /* ---------------
  * USB Event queue
  * ---------------
