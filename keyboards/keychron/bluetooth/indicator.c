@@ -135,14 +135,14 @@ void indicator_init(void) {
 
 #ifdef HOST_LED_PIN_LIST
     for (uint8_t i = 0; i < HOST_DEVICES_COUNT; i++) {
-        setPinOutput(host_led_pin_list[i]);
-        writePin(host_led_pin_list[i], !HOST_LED_PIN_ON_STATE);
+        gpio_set_pin_output(host_led_pin_list[i]);
+        gpio_write_pin(host_led_pin_list[i], !HOST_LED_PIN_ON_STATE);
     }
 #endif
 
 #ifdef BAT_LOW_LED_PIN
-    setPinOutput(BAT_LOW_LED_PIN);
-    writePin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
+    gpio_set_pin_output(BAT_LOW_LED_PIN);
+    gpio_write_pin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
 #endif
 }
 
@@ -259,9 +259,9 @@ static void indicator_timer_cb(void *arg) {
 
         if (idx < HOST_DEVICES_COUNT) {
             if ((indicator_config.value & 0x80) && !time_up) {
-               writePin(host_led_pin_list[idx], HOST_LED_PIN_ON_STATE);
+               gpio_write_pin(host_led_pin_list[idx], HOST_LED_PIN_ON_STATE);
             } else {
-               writePin(host_led_pin_list[idx], !HOST_LED_PIN_ON_STATE);
+               gpio_write_pin(host_led_pin_list[idx], !HOST_LED_PIN_ON_STATE);
             }
         }
     }
@@ -310,7 +310,7 @@ void indicator_set(bluetooth_state_t state, uint8_t host_index) {
     switch (state) {
         case BLUETOOTH_DISCONNECTED:
 #ifdef HOST_LED_PIN_LIST
-            writePin(host_led_pin_list[host_index - 1], !HOST_LED_PIN_ON_STATE);
+            gpio_write_pin(host_led_pin_list[host_index - 1], !HOST_LED_PIN_ON_STATE);
 #endif
             INDICATOR_SET(disconnected);
             indicator_config.value = (indicator_config.type == INDICATOR_NONE) ? 0 : host_index;
@@ -381,7 +381,7 @@ void indicator_battery_low_enable(bool enable) {
             bat_low_blink_duration = sync_timer_read32() | 1;
     } else {
 #    if defined(BAT_LOW_LED_PIN)
-        writePin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
+        gpio_write_pin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
 #    else
         bat_low_led_pin_state = false;
 #    endif

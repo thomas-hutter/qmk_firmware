@@ -16,6 +16,7 @@
 
 #include "snled27351-spi.h"
 #include "spi_master.h"
+#include "gpio.h"
 
 #define SNLED27351_PWM_REGISTER_COUNT 192
 #define SNLED27351_LED_CONTROL_REGISTER_COUNT 24
@@ -95,8 +96,8 @@ bool snled27351_write_pwm_buffer(uint8_t index, uint8_t *pwm_buffer) {
 
 void snled27351_init_drivers(void) {
 #if defined(LED_DRIVER_SHUTDOWN_PIN)
-    setPinOutput(LED_DRIVER_SHUTDOWN_PIN);
-    writePinHigh(LED_DRIVER_SHUTDOWN_PIN);
+    gpio_set_pin_output(LED_DRIVER_SHUTDOWN_PIN);
+    gpio_write_pin_high(LED_DRIVER_SHUTDOWN_PIN);
 #endif
 
     spi_init();
@@ -113,8 +114,8 @@ void snled27351_init_drivers(void) {
 }
 
 void snled27351_init(uint8_t index) {
-    setPinOutput(cs_pins[index]);
-    writePinHigh(cs_pins[index]);
+    gpio_set_pin_output(cs_pins[index]);
+    gpio_write_pin_high(cs_pins[index]);
     // Setting LED driver to shutdown mode
     snled27351_write_register(index, FUNCTION_PAGE, CONFIGURATION_REG, MSKSW_SHUT_DOWN_MODE);
     // Setting internal channel pulldown/pullup
@@ -220,7 +221,7 @@ void snled27351_flush(void) {
 
 void snled27351_shutdown(void) {
 #    if defined(LED_DRIVER_SHUTDOWN_PIN)
-    writePinLow(LED_DRIVER_SHUTDOWN_PIN);
+    gpio_write_pin_low(LED_DRIVER_SHUTDOWN_PIN);
 #    else
     for (uint8_t i = 0; i < SNLED27351_DRIVER_COUNT; i++)
         snled27351_sw_shutdown(i);
@@ -229,7 +230,7 @@ void snled27351_shutdown(void) {
 
 void snled27351_exit_shutdown(void) {
 #    if defined(LED_DRIVER_SHUTDOWN_PIN)
-    writePinHigh(LED_DRIVER_SHUTDOWN_PIN);
+    gpio_write_pin_high(LED_DRIVER_SHUTDOWN_PIN);
 #    else
     for (uint8_t i = 0; i < SNLED27351_DRIVER_COUNT; i++)
         snled27351_sw_return_normal(i);

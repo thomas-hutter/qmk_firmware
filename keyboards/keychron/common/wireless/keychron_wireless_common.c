@@ -125,14 +125,14 @@ void wireless_pre_task(void) {
     static uint32_t time = 0;
 
     if (time == 0) {
-        if ((readPin(BT_MODE_SELECT_PIN) << 1 | readPin(P2P4_MODE_SELECT_PIN)) != mode) {
-            mode = readPin(BT_MODE_SELECT_PIN) << 1 | readPin(P2P4_MODE_SELECT_PIN);
+        if ((gpio_read_pin(BT_MODE_SELECT_PIN) << 1 | gpio_read_pin(P2P4_MODE_SELECT_PIN)) != mode) {
+            mode = gpio_read_pin(BT_MODE_SELECT_PIN) << 1 | gpio_read_pin(P2P4_MODE_SELECT_PIN);
             time = timer_read32();
         }
     }
 
     if ((time && timer_elapsed32(time) > 100) || get_transport() == TRANSPORT_NONE) {
-        if ((readPin(BT_MODE_SELECT_PIN) << 1 | readPin(P2P4_MODE_SELECT_PIN)) == mode) {
+        if ((gpio_read_pin(BT_MODE_SELECT_PIN) << 1 | gpio_read_pin(P2P4_MODE_SELECT_PIN)) == mode) {
             time = 0;
 
             switch (mode) {
@@ -149,7 +149,7 @@ void wireless_pre_task(void) {
                     break;
             }
         } else {
-            mode = readPin(BT_MODE_SELECT_PIN) << 1 | readPin(P2P4_MODE_SELECT_PIN);
+            mode = gpio_read_pin(BT_MODE_SELECT_PIN) << 1 | gpio_read_pin(P2P4_MODE_SELECT_PIN);
             time = timer_read32();
         }
     }

@@ -42,9 +42,9 @@ static matrix_row_t empty_matrix[MATRIX_ROWS] = {0};
 void lpm_init(void) {
 #ifdef USB_POWER_SENSE_PIN
 #    if (USB_POWER_CONNECTED_LEVEL == 0)
-    setPinInputHigh(USB_POWER_SENSE_PIN);
+    gpio_set_pin_input_high(USB_POWER_SENSE_PIN);
 #    else
-    setPinInputLow(USB_POWER_SENSE_PIN);
+    gpio_set_pin_input_low(USB_POWER_SENSE_PIN);
 #    endif
 #endif
     lpm_timer_reset();
@@ -67,7 +67,7 @@ __attribute__((weak)) void enter_power_mode(pm_t mode) {}
 
 __attribute__((weak)) bool usb_power_connected(void) {
 #ifdef USB_POWER_SENSE_PIN
-    return readPin(USB_POWER_SENSE_PIN) == USB_POWER_CONNECTED_LEVEL;
+    return gpio_read_pin(USB_POWER_SENSE_PIN) == USB_POWER_CONNECTED_LEVEL;
 #endif
 
     return true;

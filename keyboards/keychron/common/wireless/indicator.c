@@ -44,12 +44,11 @@
 #define HOST_P2P4G 0x10
 #define LED_ON 0x80
 
-// #define RGB_MATRIX_TIMEOUT_INFINITE 0xFFFFFFFF
 #ifdef LED_MATRIX_ENABLE
 #    define DECIDE_TIME(t, duration) (duration == 0 ? LED_MATRIX_TIMEOUT_INFINITE : ((t > duration) ? t : duration))
 #endif
 #ifdef RGB_MATRIX_ENABLE
-#    define DECIDE_TIME(t, duration) (duration == 0 ? RGB_MATRIX_TIMEOUT_INFINITE : ((t > duration) ? t : duration))
+#    define DECIDE_TIME(t, duration) (duration == 0 ? UINT32_MAX : ((t > duration) ? t : duration))
 #endif
 
 #define INDICATOR_SET(s) memcpy(&indicator_config, &s##_config, sizeof(indicator_config_t));
@@ -80,6 +79,21 @@ static uint32_t rtc_time                  = 0;
 
 #if defined(LED_MATRIX_ENABLE) || defined(RGB_MATRIX_ENABLE)
 backlight_state_t original_backlight_state;
+static bool       keychron_driver_allow_shutdown(void);
+static uint32_t   indicator_backlit_timeout = UINT32_MAX;
+static uint32_t   indicator_backlit_timer;
+
+static void indicator_backlit_time_reset(void) {
+    indicator_backlit_timer = timer_read32();
+}
+
+static void indicator_backlit_timeout_set(uint32_t timeout) {
+    indicator_backlit_timeout = timeout;
+}
+
+static bool indicator_backlit_timeouted(void) {
+    return indicator_backlit_timeout != UINT32_MAX && timer_elapsed32(indicator_backlit_timer) >= indicator_backlit_timeout;
+}
 
 #    ifdef BT_HOST_LED_MATRIX_LIST
 static uint8_t bt_host_led_matrix_list[BT_HOST_DEVICES_COUNT] = BT_HOST_LED_MATRIX_LIST;
@@ -110,19 +124,13 @@ static pin_t p24g_led_pin_list[P24G_HOST_DEVICES_COUNT] = P24G_HOST_LED_PIN_LIST
 #    define SET_LED_P24G(idx) led_matrix_set_value(idx, 255)
 #    define SET_LED_LOW_BAT(idx) led_matrix_set_value(idx, 255)
 #    define LED_DRIVER_IS_ENABLED led_matrix_is_enabled
-#    define LED_DRIVER_EECONFIG_RELOAD()                                                           \
-        eeprom_read_block(&led_matrix_eeconfig, EECONFIG_LED_MATRIX, sizeof(led_matrix_eeconfig)); \
-        if (!led_matrix_eeconfig.mode) {                                                           \
-            eeconfig_update_led_matrix_default();                                                  \
-        }
-#    define LED_DRIVER_ALLOW_SHUTDOWN led_matrix_driver_allow_shutdown
-#    define LED_DRIVER_SHUTDOWN led_matrix_driver_shutdown
-#    define LED_DRIVER_EXIT_SHUTDOWN led_matrix_driver_exit_shutdown
+#    define LED_DRIVER_EECONFIG_RELOAD() led_matrix_reload_from_eeprom()
+#    define LED_DRIVER_ALLOW_SHUTDOWN keychron_driver_allow_shutdown
 #    define LED_DRIVER_ENABLE_NOEEPROM led_matrix_enable_noeeprom
 #    define LED_DRIVER_DISABLE_NOEEPROM led_matrix_disable_noeeprom
-#    define LED_DRIVER_DISABLE_TIMEOUT_SET led_matrix_disable_timeout_set
-#    define LED_DRIVER_DISABLE_TIME_RESET led_matrix_disable_time_reset
-#    define LED_DRIVER_TIMEOUTED led_matrix_timeouted
+#    define LED_DRIVER_DISABLE_TIMEOUT_SET indicator_backlit_timeout_set
+#    define LED_DRIVER_DISABLE_TIME_RESET indicator_backlit_time_reset
+#    define LED_DRIVER_TIMEOUTED indicator_backlit_timeouted
 #endif
 
 #ifdef RGB_MATRIX_ENABLE
@@ -137,19 +145,13 @@ static pin_t p24g_led_pin_list[P24G_HOST_DEVICES_COUNT] = P24G_HOST_LED_PIN_LIST
 #    define SET_LED_P24G(idx) rgb_matrix_set_color(idx, 0, 255, 0)
 #    define SET_LED_LOW_BAT(idx) rgb_matrix_set_color(idx, 255, 0, 0)
 #    define LED_DRIVER_IS_ENABLED rgb_matrix_is_enabled
-#    define LED_DRIVER_EECONFIG_RELOAD()                                                       \
-        eeprom_read_block(&rgb_matrix_config, EECONFIG_RGB_MATRIX, sizeof(rgb_matrix_config)); \
-        if (!rgb_matrix_config.mode) {                                                         \
-            eeconfig_update_rgb_matrix_default();                                              \
-        }
-#    define LED_DRIVER_ALLOW_SHUTDOWN rgb_matrix_driver_allow_shutdown
-#    define LED_DRIVER_SHUTDOWN rgb_matrix_driver_shutdown
-#    define LED_DRIVER_EXIT_SHUTDOWN rgb_matrix_driver_exit_shutdown
+#    define LED_DRIVER_EECONFIG_RELOAD() rgb_matrix_reload_from_eeprom()
+#    define LED_DRIVER_ALLOW_SHUTDOWN keychron_driver_allow_shutdown
 #    define LED_DRIVER_ENABLE_NOEEPROM rgb_matrix_enable_noeeprom
 #    define LED_DRIVER_DISABLE_NOEEPROM rgb_matrix_disable_noeeprom
-#    define LED_DRIVER_DISABLE_TIMEOUT_SET rgb_matrix_disable_timeout_set
-#    define LED_DRIVER_DISABLE_TIME_RESET rgb_matrix_disable_time_reset
-#    define LED_DRIVER_TIMEOUTED rgb_matrix_timeouted
+#    define LED_DRIVER_DISABLE_TIMEOUT_SET indicator_backlit_timeout_set
+#    define LED_DRIVER_DISABLE_TIME_RESET indicator_backlit_time_reset
+#    define LED_DRIVER_TIMEOUTED indicator_backlit_timeouted
 #endif
 
 bool LED_INDICATORS_KB(void);
@@ -159,26 +161,26 @@ void indicator_init(void) {
 
 #if defined(BT_HOST_LED_PIN_LIST)
     for (uint8_t i = 0; i < BT_HOST_DEVICES_COUNT; i++) {
-        setPinOutput(bt_led_pin_list[i]);
-        writePin(bt_led_pin_list[i], !HOST_LED_PIN_ON_STATE);
+        gpio_set_pin_output(bt_led_pin_list[i]);
+        gpio_write_pin(bt_led_pin_list[i], !HOST_LED_PIN_ON_STATE);
     }
 #endif
 
 #ifdef P24G_HOST_LED_PIN_LIST
     for (uint8_t i = 0; i < P24G_HOST_DEVICES_COUNT; i++) {
-        setPinOutput(p24g_led_pin_list[i]);
-        writePin(p24g_led_pin_list[i], !HOST_LED_PIN_ON_STATE);
+        gpio_set_pin_output(p24g_led_pin_list[i]);
+        gpio_write_pin(p24g_led_pin_list[i], !HOST_LED_PIN_ON_STATE);
     }
 #endif
 
 #ifdef COMMON_BT_LED_PIN
-    setPinOutput(COMMON_BT_LED_PIN);
-    writePin(COMMON_BT_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
+    gpio_set_pin_output(COMMON_BT_LED_PIN);
+    gpio_write_pin(COMMON_BT_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
 #endif
 
 #ifdef COMMON_P24G_LED_PIN
-    setPinOutput(COMMON_P24G_LED_PIN);
-    writePin(COMMON_P24G_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
+    gpio_set_pin_output(COMMON_P24G_LED_PIN);
+    gpio_write_pin(COMMON_P24G_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
 #endif
 
 #ifdef BAT_LOW_LED_PIN
@@ -186,8 +188,8 @@ void indicator_init(void) {
     if (timer_read32() > POWER_ON_LED_DURATION)
 #    endif
     {
-        setPinOutput(BAT_LOW_LED_PIN);
-        writePin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
+        gpio_set_pin_output(BAT_LOW_LED_PIN);
+        gpio_write_pin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
     }
 #endif
 }
@@ -335,20 +337,20 @@ static void indicator_timer_cb(void *arg) {
 #if defined(BT_HOST_LED_PIN_LIST) || defined(P24G_HOST_LED_PIN_LIST)
         for (uint8_t i = 0; i < led_count; i++) {
             if (i != idx) {
-                if (led_lin_list) writePin(led_lin_list[idx], !HOST_LED_PIN_ON_STATE);
+                if (led_lin_list) gpio_write_pin(led_lin_list[idx], !HOST_LED_PIN_ON_STATE);
             }
         }
 #endif
         
         if ((indicator_config.value & LED_ON) && !time_up) {
-            if (led_lin_list) writePin(led_lin_list[idx], HOST_LED_PIN_ON_STATE);
+            if (led_lin_list) gpio_write_pin(led_lin_list[idx], HOST_LED_PIN_ON_STATE);
 #    if defined(COMMON_BT_LED_PIN) || defined(COMMON_P24G_LED_PIN)
-            if (led_pin != NO_PIN) writePin(led_pin, COMMON_BT_LED_PIN_ON_STATE);
+            if (led_pin != NO_PIN) gpio_write_pin(led_pin, COMMON_BT_LED_PIN_ON_STATE);
 #    endif
         } else {
-            if (led_lin_list) writePin(led_lin_list[idx], !HOST_LED_PIN_ON_STATE);
+            if (led_lin_list) gpio_write_pin(led_lin_list[idx], !HOST_LED_PIN_ON_STATE);
 #    if defined(COMMON_BT_LED_PIN) || defined(COMMON_P24G_LED_PIN)
-            if (led_pin != NO_PIN) writePin(led_pin, !COMMON_BT_LED_PIN_ON_STATE);
+            if (led_pin != NO_PIN) gpio_write_pin(led_pin, !COMMON_BT_LED_PIN_ON_STATE);
 #    endif
         }
         
@@ -411,16 +413,16 @@ void indicator_set(wt_state_t state, uint8_t host_index) {
     switch (state) {
         case WT_DISCONNECTED:
 #if defined(BT_HOST_LED_PIN_LIST)
-            if ((host_index & HOST_P2P4G) != HOST_P2P4G) writePin(bt_led_pin_list[(host_index & HOST_INDEX_MASK) - 1], !HOST_LED_PIN_ON_STATE);
+            if ((host_index & HOST_P2P4G) != HOST_P2P4G) gpio_write_pin(bt_led_pin_list[(host_index & HOST_INDEX_MASK) - 1], !HOST_LED_PIN_ON_STATE);
 #endif
 #if defined(P24G_HOST_LED_PIN_LIST)
-            if (host_index & HOST_P2P4G) writePin(p24g_led_pin_list[(host_index & HOST_INDEX_MASK) - 1], !HOST_LED_PIN_ON_STATE);
+            if (host_index & HOST_P2P4G) gpio_write_pin(p24g_led_pin_list[(host_index & HOST_INDEX_MASK) - 1], !HOST_LED_PIN_ON_STATE);
 #endif
 #ifdef COMMON_BT_LED_PIN
-            writePin(COMMON_BT_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
+            gpio_write_pin(COMMON_BT_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
 #endif
 #ifdef COMMON_P24G_LED_PIN
-            writePin(COMMON_P24G_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
+            gpio_write_pin(COMMON_P24G_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
 #endif
             INDICATOR_SET(disconnected);
             indicator_config.value = (indicator_config.type == INDICATOR_NONE) ? 0 : host_index;
@@ -484,16 +486,16 @@ void indicator_set(wt_state_t state, uint8_t host_index) {
 #endif
 
 #if defined(BT_HOST_LED_PIN_LIST)
-            for (uint8_t i = 0; i < BT_HOST_DEVICES_COUNT; i++) writePin(bt_led_pin_list[i], !HOST_LED_PIN_ON_STATE);
+            for (uint8_t i = 0; i < BT_HOST_DEVICES_COUNT; i++) gpio_write_pin(bt_led_pin_list[i], !HOST_LED_PIN_ON_STATE);
 #endif
 #if defined(P24G_HOST_LED_PIN_LIST)
-            for (uint8_t i = 0; i < P24G_HOST_DEVICES_COUNT; i++) writePin(p24g_led_pin_list[i], !HOST_LED_PIN_ON_STATE);
+            for (uint8_t i = 0; i < P24G_HOST_DEVICES_COUNT; i++) gpio_write_pin(p24g_led_pin_list[i], !HOST_LED_PIN_ON_STATE);
 #endif
 #ifdef COMMON_BT_LED_PIN
-            writePin(COMMON_BT_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
+            gpio_write_pin(COMMON_BT_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
 #endif
 #ifdef COMMON_P24G_LED_PIN
-            writePin(COMMON_P24G_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
+            gpio_write_pin(COMMON_P24G_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
 #endif
 
             break;
@@ -545,7 +547,7 @@ void indicator_battery_low_enable(bool enable) {
         rtc_time          = 0;
         bat_low_ind_state = 0;
 #    if defined(BAT_LOW_LED_PIN)
-        writePin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
+        gpio_write_pin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
 #    endif
 #    if defined(SPACE_KEY_LOW_BAT_IND)
         indicator_eeconfig_reload();
@@ -564,12 +566,12 @@ void indicator_battery_low(void) {
                 bat_low_ind_state &= 0x7F;
                 bat_low_ind_state++;
 #    if defined(BAT_LOW_LED_PIN)
-                writePin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
+                gpio_write_pin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
 #    endif
             } else {
                 bat_low_ind_state |= 0x80;
 #    if defined(BAT_LOW_LED_PIN)
-                writePin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
+                gpio_write_pin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
 #    endif
             }
 
@@ -578,7 +580,7 @@ void indicator_battery_low(void) {
             /*  Restore backligth state */
             if ((bat_low_ind_state & 0x0F) > (LOW_BAT_LED_BLINK_TIMES)) {
 #    if defined(BAT_LOW_LED_PIN)
-                writePin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
+                gpio_write_pin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
 #    endif
 #    if defined(SPACE_KEY_LOW_BAT_IND)
 #        if defined(NUM_LOCK_INDEX) || defined(CAPS_LOCK_INDEX) || defined(SCROLL_LOCK_INDEX) || defined(COMPOSE_LOCK_INDEX) || defined(KANA_LOCK_INDEX)
@@ -589,7 +591,7 @@ void indicator_battery_low(void) {
             }
         } else if ((bat_low_ind_state & 0x0F) > (LOW_BAT_LED_BLINK_TIMES)) {
 #    if defined(BAT_LOW_LED_PIN)
-            writePin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
+            gpio_write_pin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
 #    endif
             bat_low_ind_state = 0;
             lpm_timer_reset();
@@ -726,15 +728,9 @@ bool led_update_kb(led_t led_state) {
         led_update_ports(led_state);
 
         if (!LED_DRIVER_IS_ENABLED() || (LED_DRIVER_IS_ENABLED() && LED_DRIVER_TIMEOUTED())) {
-#    if defined(LED_MATRIX_DRIVER_SHUTDOWN_ENABLE) || defined(RGB_MATRIX_DRIVER_SHUTDOWN_ENABLE)
-            LED_DRIVER_EXIT_SHUTDOWN();
-#    endif
             SET_ALL_LED_OFF();
             os_state_indicate();
             LED_DRIVER.flush();
-#    if defined(LED_MATRIX_DRIVER_SHUTDOWN_ENABLE) || defined(RGB_MATRIX_DRIVER_SHUTDOWN_ENABLE)
-            if (LED_DRIVER_ALLOW_SHUTDOWN()) LED_DRIVER_SHUTDOWN();
-#    endif
         }
     }
 
@@ -749,8 +745,7 @@ void LED_NONE_INDICATORS_KB(void) {
     os_state_indicate();
 }
 
-#    if defined(LED_MATRIX_DRIVER_SHUTDOWN_ENABLE) || defined(RGB_MATRIX_DRIVER_SHUTDOWN_ENABLE)
-bool LED_DRIVER_ALLOW_SHUTDOWN(void) {
+static bool keychron_driver_allow_shutdown(void) {
 #        if defined(NUM_LOCK_INDEX)
     if (host_keyboard_led_state().num_lock) return false;
 #        endif
@@ -768,6 +763,5 @@ bool LED_DRIVER_ALLOW_SHUTDOWN(void) {
 #        endif
     return true;
 }
-#    endif
 
 #endif

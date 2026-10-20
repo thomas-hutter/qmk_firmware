@@ -104,9 +104,9 @@ void enter_power_mode(pm_t mode) {
 
     SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
 
-    writePinLow(BLUETOOTH_INT_OUTPUT_PIN);
+    gpio_write_pin_low(BLUETOOTH_INT_OUTPUT_PIN);
     stm32_clock_init();
-    writePinHigh(BLUETOOTH_INT_OUTPUT_PIN);
+    gpio_write_pin_high(BLUETOOTH_INT_OUTPUT_PIN);
 }
 
 void usb_power_connect(void) {}

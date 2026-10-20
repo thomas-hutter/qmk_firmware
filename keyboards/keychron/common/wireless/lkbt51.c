@@ -180,17 +180,17 @@ const SPIConfig spicfg = {
 void lkbt51_init(bool wakeup_from_low_power_mode) {
 #ifdef LKBT51_RESET_PIN
     if (!wakeup_from_low_power_mode) {
-        setPinOutput(LKBT51_RESET_PIN);
-        writePinLow(LKBT51_RESET_PIN);
+        gpio_set_pin_output(LKBT51_RESET_PIN);
+        gpio_write_pin_low(LKBT51_RESET_PIN);
         wait_ms(1);
-        writePinHigh(LKBT51_RESET_PIN);
+        gpio_write_pin_high(LKBT51_RESET_PIN);
     }
 #endif
 
 #if (HAL_USE_SPI == TRUE)
     if (WT_DRIVER.state == SPI_UNINIT) {
-        setPinOutput(SPI_SCK_PIN);
-        writePinHigh(SPI_SCK_PIN);
+        gpio_set_pin_output(SPI_SCK_PIN);
+        gpio_write_pin_high(SPI_SCK_PIN);
 
         palSetLineMode(SPI_SCK_PIN, PAL_MODE_ALTERNATE(SPI_CLK_PAL_MODE));
         palSetLineMode(SPI_MISO_PIN, PAL_MODE_ALTERNATE(SPI_MISO_PAL_MODE));
@@ -205,10 +205,10 @@ void lkbt51_init(bool wakeup_from_low_power_mode) {
     }
 #endif
 
-    setPinOutput(BLUETOOTH_INT_OUTPUT_PIN);
-    writePinHigh(BLUETOOTH_INT_OUTPUT_PIN);
+    gpio_set_pin_output(BLUETOOTH_INT_OUTPUT_PIN);
+    gpio_write_pin_high(BLUETOOTH_INT_OUTPUT_PIN);
 
-    setPinInputHigh(LKBT51_INT_INPUT_PIN);
+    gpio_set_pin_input_high(LKBT51_INT_INPUT_PIN);
 }
 
 static inline void lkbt51_wake(void) {
@@ -761,7 +761,7 @@ void lkbt51_task(void) {
     static uint8_t len              = 0xff;
     static uint8_t sn               = 0;
 
-    if (readPin(LKBT51_INT_INPUT_PIN) == 0) {
+    if (gpio_read_pin(LKBT51_INT_INPUT_PIN) == 0) {
         uint8_t buf[BUFFER_SIZE] = {0};
         lkbt51_read(buf, expect_len);
 

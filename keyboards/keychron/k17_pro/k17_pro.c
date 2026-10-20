@@ -158,11 +158,11 @@ static void encoder_pad_cb(void *param) {
 #endif
 
 void keyboard_post_init_kb(void) {
-	/*pin_t encoders_pad_a1[NUM_ENCODERS_MAX_PER_SIDE] = ENCODERS_PAD_A;
-    pin_t encoders_pad_b1[NUM_ENCODERS_MAX_PER_SIDE] = ENCODERS_PAD_B;
+	/*pin_t encoders_pad_a1[NUM_ENCODERS_MAX_PER_SIDE] = ENCODER_A_PINS;
+    pin_t encoders_pad_b1[NUM_ENCODERS_MAX_PER_SIDE] = ENCODER_B_PINS;
     for (uint8_t i = 0; i < NUM_ENCODERS_MAX_PER_SIDE; i++) {
-        setPinInput(encoders_pad_a1[i]);
-        setPinInput(encoders_pad_b1[i]);
+        gpio_set_pin_input(encoders_pad_a1[i]);
+        gpio_set_pin_input(encoders_pad_b1[i]);
     }*/
 	
     dip_switch_read(true);
@@ -181,12 +181,12 @@ void keyboard_post_init_kb(void) {
     bluetooth_init();
 
     power_on_indicator_timer_buffer = sync_timer_read32() | 1;
-    writePin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
-    //writePin(LED_CAPS_LOCK_PIN, LED_PIN_ON_STATE);
+    gpio_write_pin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
+    //gpio_write_pin(LED_CAPS_LOCK_PIN, LED_PIN_ON_STATE);
 
 #    ifdef ENCODER_ENABLE
-    pin_t encoders_pad_a[NUM_ENCODERS] = ENCODERS_PAD_A;
-    pin_t encoders_pad_b[NUM_ENCODERS] = ENCODERS_PAD_B;
+    pin_t encoders_pad_a[NUM_ENCODERS] = ENCODER_A_PINS;
+    pin_t encoders_pad_b[NUM_ENCODERS] = ENCODER_B_PINS;
     for (uint32_t i = 0; i < NUM_ENCODERS; i++) {
         palEnableLineEvent(encoders_pad_a[i], PAL_EVENT_MODE_BOTH_EDGES);
         palEnableLineEvent(encoders_pad_b[i], PAL_EVENT_MODE_BOTH_EDGES);
@@ -204,11 +204,11 @@ void matrix_scan_kb(void) {
         if (sync_timer_elapsed32(power_on_indicator_timer_buffer) > POWER_ON_LED_DURATION) {
             power_on_indicator_timer_buffer = 0;
 
-            writePin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
-            //if (!host_keyboard_led_state().caps_lock) writePin(LED_CAPS_LOCK_PIN, !LED_PIN_ON_STATE);
+            gpio_write_pin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
+            //if (!host_keyboard_led_state().caps_lock) gpio_write_pin(LED_CAPS_LOCK_PIN, !LED_PIN_ON_STATE);
         } else {
-            writePin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
-            //writePin(LED_CAPS_LOCK_PIN, LED_PIN_ON_STATE);
+            gpio_write_pin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
+            //gpio_write_pin(LED_CAPS_LOCK_PIN, LED_PIN_ON_STATE);
         }
     }
 
@@ -285,9 +285,9 @@ void ckbt51_default_ack_handler(uint8_t *data, uint8_t len) {
 void bluetooth_pre_task(void) {
     static uint8_t mode = 1;
 
-    if (readPin(USB_BT_MODE_SELECT_PIN) != mode) {
-        if (readPin(USB_BT_MODE_SELECT_PIN) != mode) {
-            mode = readPin(USB_BT_MODE_SELECT_PIN);
+    if (gpio_read_pin(USB_BT_MODE_SELECT_PIN) != mode) {
+        if (gpio_read_pin(USB_BT_MODE_SELECT_PIN) != mode) {
+            mode = gpio_read_pin(USB_BT_MODE_SELECT_PIN);
             set_transport(mode == 0 ? TRANSPORT_BLUETOOTH : TRANSPORT_USB);
         }
     }

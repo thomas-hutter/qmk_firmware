@@ -55,7 +55,6 @@ uint8_t get_first_key(void) {
             ;
         return i << 3 | biton(nkro_report->bits[i]);
     }
-#    endif
 #endif
     return keyboard_report->keys[0];
 }
@@ -77,7 +76,6 @@ bool is_key_pressed(uint8_t key) {
             return false;
         }
     }
-#endif
 #endif
     for (int i = 0; i < KEYBOARD_REPORT_KEYS; i++) {
         if (keyboard_report->keys[i] == key) {
@@ -195,7 +193,6 @@ void del_key_from_report(uint8_t key) {
         del_key_bit(nkro_report, key);
         return;
     }
-#    endif
 #endif
     del_key_byte(keyboard_report, key);
 }
@@ -211,7 +208,6 @@ void clear_keys_from_report(void) {
         memset(nkro_report->bits, 0, sizeof(nkro_report->bits));
         return;
     }
-#    endif
 #endif
     memset(keyboard_report->keys, 0, sizeof(keyboard_report->keys));
 }

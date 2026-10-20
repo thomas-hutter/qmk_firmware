@@ -51,17 +51,17 @@ pin_t pins_col[MATRIX_COLS] = MATRIX_COL_PINS;
 __attribute__((weak)) void select_all_cols(void) {
     for (uint8_t i = 0; i < MATRIX_COLS; i++) {
         if (pins_col[i] == NO_PIN) continue;
-        setPinOutput(pins_col[i]);
-        writePinLow(pins_col[i]);
+        gpio_set_pin_output(pins_col[i]);
+        gpio_write_pin_low(pins_col[i]);
     }
 }
 
 void lpm_init(void) {
 #ifdef USB_POWER_SENSE_PIN
 #    if (USB_POWER_CONNECTED_LEVEL == 0)
-    setPinInputHigh(USB_POWER_SENSE_PIN);
+    gpio_set_pin_input_high(USB_POWER_SENSE_PIN);
 #    else
-    setPinInputLow(USB_POWER_SENSE_PIN);
+    gpio_set_pin_input_low(USB_POWER_SENSE_PIN);
 #    endif
 #endif
     lpm_timer_reset();
@@ -95,7 +95,7 @@ __attribute__((weak)) void enter_power_mode(pm_t mode) {}
 
 __attribute__((weak)) bool usb_power_connected(void) {
 #ifdef USB_POWER_SENSE_PIN
-    return readPin(USB_POWER_SENSE_PIN) == USB_POWER_CONNECTED_LEVEL;
+    return gpio_read_pin(USB_POWER_SENSE_PIN) == USB_POWER_CONNECTED_LEVEL;
 #else
     return true;
 #endif
@@ -141,13 +141,13 @@ bool pre_enter_low_power_mode(pm_t mode) {
 
     for (uint8_t x = 0; x < MATRIX_ROWS; x++) {
         if (pins_row[x] != NO_PIN) {
-            writePinLow(pins_row[x]);
+            gpio_write_pin_low(pins_row[x]);
         }
     }
 
     for (uint8_t x = 0; x < MATRIX_COLS; x++) {
         if (pins_col[x] != NO_PIN) {
-            setPinInputLow(pins_col[x]);
+            gpio_set_pin_input_low(pins_col[x]);
         }
     }
 #else
@@ -174,7 +174,7 @@ bool pre_enter_low_power_mode(pm_t mode) {
     static pin_t dip_switch_pad[] = DIP_SWITCH_PINS;
 
     for (uint8_t i = 0; i < NUMBER_OF_DIP_SWITCHES; i++) {
-        setPinInputLow(dip_switch_pad[i]);
+        gpio_set_pin_input_low(dip_switch_pad[i]);
     }
 #endif
     battery_stop();
@@ -233,9 +233,7 @@ static inline void lpm_wakeup(void) {
 #endif
 
 
-    /* Call debounce_free() to avoiding memory leak of debounce_counters as debounce_init()
-    invoked in matrix_init() alloc new memory to debounce_counters */
-    debounce_free();
+    /* Reinitialize matrix scanning after restoring the GPIO state. */
     matrix_init();
 
 #ifdef ENABLE_RGB_MATRIX_PIXEL_RAIN
@@ -274,11 +272,17 @@ void lpm_task(void) {
         if (
 #    ifdef LED_MATRIX_ENABLE
             !led_matrix_is_enabled() ||
-            (led_matrix_is_enabled() && led_matrix_is_driver_shutdown())
+            led_matrix_get_mode() == LED_MATRIX_NONE
+#        if LED_MATRIX_TIMEOUT > 0
+            || last_input_activity_elapsed() > (uint32_t)LED_MATRIX_TIMEOUT
+#        endif
 #    endif
 #    ifdef RGB_MATRIX_ENABLE
                 !rgb_matrix_is_enabled() ||
-            (rgb_matrix_is_enabled() && rgb_matrix_is_driver_shutdown())
+            rgb_matrix_get_mode() == RGB_MATRIX_NONE
+#        if RGB_MATRIX_TIMEOUT > 0
+                || last_input_activity_elapsed() > (uint32_t)RGB_MATRIX_TIMEOUT
+#        endif
 #    endif
         )
 #endif

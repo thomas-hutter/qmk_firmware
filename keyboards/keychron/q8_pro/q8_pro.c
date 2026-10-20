@@ -159,8 +159,8 @@ void keyboard_post_init_kb(void) {
 #endif
 
 #ifdef ENCODER_ENABLE
-    pin_t encoders_pad_a[NUM_ENCODERS] = ENCODERS_PAD_A;
-    pin_t encoders_pad_b[NUM_ENCODERS] = ENCODERS_PAD_B;
+    pin_t encoders_pad_a[NUM_ENCODERS] = ENCODER_A_PINS;
+    pin_t encoders_pad_b[NUM_ENCODERS] = ENCODER_B_PINS;
     for (uint32_t i = 0; i < NUM_ENCODERS; i++) {
         palEnableLineEvent(encoders_pad_a[i], PAL_EVENT_MODE_BOTH_EDGES);
         palEnableLineEvent(encoders_pad_b[i], PAL_EVENT_MODE_BOTH_EDGES);
@@ -246,9 +246,9 @@ void ckbt51_default_ack_handler(uint8_t *data, uint8_t len) {
 void bluetooth_pre_task(void) {
     static uint8_t mode = 1;
 
-    if (readPin(USB_BT_MODE_SELECT_PIN) != mode) {
-        if (readPin(USB_BT_MODE_SELECT_PIN) != mode) {
-            mode = readPin(USB_BT_MODE_SELECT_PIN);
+    if (gpio_read_pin(USB_BT_MODE_SELECT_PIN) != mode) {
+        if (gpio_read_pin(USB_BT_MODE_SELECT_PIN) != mode) {
+            mode = gpio_read_pin(USB_BT_MODE_SELECT_PIN);
             set_transport(mode == 0 ? TRANSPORT_BLUETOOTH : TRANSPORT_USB);
         }
     }

@@ -230,9 +230,9 @@ void ckbt51_default_ack_handler(uint8_t *data, uint8_t len) {
 void bluetooth_pre_task(void) {
     static uint8_t mode = 1;
 
-    if (readPin(USB_BT_MODE_SELECT_PIN) != mode) {
-        if (readPin(USB_BT_MODE_SELECT_PIN) != mode) {
-            mode = readPin(USB_BT_MODE_SELECT_PIN);
+    if (gpio_read_pin(USB_BT_MODE_SELECT_PIN) != mode) {
+        if (gpio_read_pin(USB_BT_MODE_SELECT_PIN) != mode) {
+            mode = gpio_read_pin(USB_BT_MODE_SELECT_PIN);
             set_transport(mode == 0 ? TRANSPORT_BLUETOOTH : TRANSPORT_USB);
         }
     }

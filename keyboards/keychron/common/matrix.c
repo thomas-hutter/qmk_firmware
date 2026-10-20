@@ -57,20 +57,20 @@ pin_t col_pins[MATRIX_COLS] = MATRIX_COL_PINS;
 
 static inline uint8_t readMatrixPin(pin_t pin) {
     if (pin != NO_PIN) {
-        return readPin(pin);
+        return gpio_read_pin(pin);
     } else {
         return 1;
     }
 }
 
 static inline void setPinOutput_writeLow(pin_t pin) {
-    setPinOutput(pin);
-    writePinLow(pin);
+    gpio_set_pin_output(pin);
+    gpio_write_pin_low(pin);
 }
 
 static inline void setPinOutput_writeHigh(pin_t pin) {
-    setPinOutput(pin);
-    writePinHigh(pin);
+    gpio_set_pin_output(pin);
+    gpio_write_pin_high(pin);
 }
 
 static inline void HC595_delay(uint16_t n) {
@@ -85,13 +85,13 @@ static void HC595_output(SIZE_T data, bool bit_flag) {
     ATOMIC_BLOCK_FORCEON {
         for (uint8_t i = 0; i < (HC595_END_INDEX - HC595_START_INDEX + 1); i++) {
             if (data & 0x1) {
-                writePinHigh(HC595_DS);
+                gpio_write_pin_high(HC595_DS);
             } else {
-                writePinLow(HC595_DS);
+                gpio_write_pin_low(HC595_DS);
             }
-            writePinHigh(HC595_SHCP);
+            gpio_write_pin_high(HC595_SHCP);
             HC595_delay(n);
-            writePinLow(HC595_SHCP);
+            gpio_write_pin_low(HC595_SHCP);
             HC595_delay(n);
             if (bit_flag) {
                 break;
@@ -99,9 +99,9 @@ static void HC595_output(SIZE_T data, bool bit_flag) {
                 data = data >> 1;
             }
         }
-        writePinHigh(HC595_STCP);
+        gpio_write_pin_high(HC595_STCP);
         HC595_delay(n);
-        writePinLow(HC595_STCP);
+        gpio_write_pin_low(HC595_STCP);
         HC595_delay(n);
     }
 }
@@ -124,7 +124,7 @@ static void unselect_col(uint8_t col) {
 #ifdef MATRIX_UNSELECT_DRIVE_HIGH
         setPinOutput_writeHigh(col_pins[col]);
 #else
-        setPinInputHigh(col_pins[col]);
+        gpio_set_pin_input_high(col_pins[col]);
 #endif
     } else {
         HC595_output(0x01, true);
@@ -137,7 +137,7 @@ static void unselect_cols(void) {
 #ifdef MATRIX_UNSELECT_DRIVE_HIGH
             setPinOutput_writeHigh(col_pins[col]);
 #else
-            setPinInputHigh(col_pins[col]);
+            gpio_set_pin_input_high(col_pins[col]);
 #endif
         } else {
             if (col == HC595_START_INDEX) {
@@ -184,13 +184,13 @@ static void matrix_read_rows_on_col(matrix_row_t current_matrix[], uint8_t curre
 }
 
 void matrix_init_custom(void) {
-    setPinOutput(HC595_DS);
-    setPinOutput(HC595_STCP);
-    setPinOutput(HC595_SHCP);
+    gpio_set_pin_output(HC595_DS);
+    gpio_set_pin_output(HC595_STCP);
+    gpio_set_pin_output(HC595_SHCP);
 
     for (uint8_t x = 0; x < MATRIX_ROWS; x++) {
         if (row_pins[x] != NO_PIN) {
-            setPinInputHigh(row_pins[x]);
+            gpio_set_pin_input_high(row_pins[x]);
         }
     }
 

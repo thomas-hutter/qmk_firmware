@@ -72,7 +72,7 @@ void keychron_common_init(void) {
     palSetLineMode(BT_MODE_SELECT_PIN, PAL_MODE_INPUT);
 #    endif
 #    ifdef BAT_LOW_LED_PIN
-    writePin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
+    gpio_write_pin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
 #    endif
 
     lkbt51_init(false);
@@ -166,14 +166,23 @@ void keychron_common_task(void) {
 }
 
 #ifdef ENCODER_ENABLE
+static pin_t encoders_pad_a[] = ENCODER_A_PINS;
+static pin_t encoders_pad_b[] = ENCODER_B_PINS;
+
+extern void encoder_quadrature_handle_read(uint8_t index, uint8_t pin_a_state, uint8_t pin_b_state);
+
+// Keychron's interrupt callbacks still use this legacy name. QMK's quadrature
+// driver now exposes encoder_quadrature_handle_read() for interrupt-driven reads.
+void encoder_inerrupt_read(uint8_t index) {
+    encoder_quadrature_handle_read(index, gpio_read_pin(encoders_pad_a[index]), gpio_read_pin(encoders_pad_b[index]));
+}
+
 static void encoder_pad_cb(void *param) {
     uint8_t index = (uint32_t)param;
     encoder_inerrupt_read(index);
 }
 
 void encoder_cb_init(void) {
-    pin_t encoders_pad_a[] = ENCODERS_PAD_A;
-    pin_t encoders_pad_b[] = ENCODERS_PAD_B;
     for (uint32_t i = 0; i < NUM_ENCODERS; i++) {
         palEnableLineEvent(encoders_pad_a[i], PAL_EVENT_MODE_BOTH_EDGES);
         palEnableLineEvent(encoders_pad_b[i], PAL_EVENT_MODE_BOTH_EDGES);

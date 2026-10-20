@@ -122,8 +122,8 @@ void ckbt51_init(bool wakeup_from_low_power_mode) {
     palSetPadMode(WT_DRIVER_UART_RX_BANK, WT_DRIVER_UART_RX, PAL_MODE_ALTERNATE(WT_DRIVER_UART_RX_PAL_MODE));
 #endif
 
-    setPinOutput(CKBT51_INT_INPUT_PIN);
-    writePinHigh(CKBT51_INT_INPUT_PIN);
+    gpio_set_pin_output(CKBT51_INT_INPUT_PIN);
+    gpio_write_pin_high(CKBT51_INT_INPUT_PIN);
 }
 
 void ckbt51_send_cmd(uint8_t* payload, uint8_t len, bool ack_enable, bool retry) {
@@ -138,12 +138,12 @@ void ckbt51_send_cmd(uint8_t* payload, uint8_t len, bool ack_enable, bool retry)
     systime_t start = 0;
 
     for (i = 0; i < 3; i++) {
-        writePin(CKBT51_INT_INPUT_PIN, i % 2);
+        gpio_write_pin(CKBT51_INT_INPUT_PIN, i % 2);
         start = chVTGetSystemTime();
         while (chTimeI2US(chVTTimeElapsedSinceX(start)) < CKBT51_WAKE_WAIT_TIME / 3) {
         };
     }
-    writePinHigh(CKBT51_INT_INPUT_PIN);
+    gpio_write_pin_high(CKBT51_INT_INPUT_PIN);
 
     uint16_t checksum = 0;
     for (i = 0; i < len; i++)

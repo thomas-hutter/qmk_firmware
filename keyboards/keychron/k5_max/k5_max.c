@@ -50,7 +50,7 @@ void keyboard_post_init_kb(void) {
     palSetLineMode(P2P4_MODE_SELECT_PIN, PAL_MODE_INPUT);
     palSetLineMode(BT_MODE_SELECT_PIN, PAL_MODE_INPUT);
 
-    writePin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
+    gpio_write_pin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
     lkbt51_init(false);
     wireless_init();
 #endif
@@ -68,25 +68,25 @@ bool keychron_task_kb(void) {
         if (timer_elapsed32(power_on_indicator_timer) > POWER_ON_LED_DURATION) {
             power_on_indicator_timer = 0;
 
-            if (!host_keyboard_led_state().caps_lock) writePin(LED_CAPS_LOCK_PIN, !LED_PIN_ON_STATE);
+            if (!host_keyboard_led_state().caps_lock) gpio_write_pin(LED_CAPS_LOCK_PIN, !LED_PIN_ON_STATE);
 #ifdef LK_WIRELESS_ENABLE
-            writePin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
+            gpio_write_pin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
             for (uint8_t i = 0; i < sizeof(bt_led_pins) / sizeof(pin_t); i++)
-                writePin(bt_led_pins[i], 1);
+                gpio_write_pin(bt_led_pins[i], 1);
             for (uint8_t i = 0; i < sizeof(p24g_led_pins) / sizeof(pin_t); i++)
-                writePin(p24g_led_pins[i], 1);
+                gpio_write_pin(p24g_led_pins[i], 1);
 #endif
 
         } else {
-            writePin(LED_CAPS_LOCK_PIN, LED_PIN_ON_STATE);
+            gpio_write_pin(LED_CAPS_LOCK_PIN, LED_PIN_ON_STATE);
 #ifdef LK_WIRELESS_ENABLE
-            writePin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
+            gpio_write_pin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
             if (get_transport() != TRANSPORT_P2P4)
                 for (uint8_t i = 0; i < sizeof(bt_led_pins) / sizeof(pin_t); i++)
-                    writePin(bt_led_pins[i], 0);
+                    gpio_write_pin(bt_led_pins[i], 0);
             if (get_transport() != TRANSPORT_BLUETOOTH)
                 for (uint8_t i = 0; i < sizeof(p24g_led_pins) / sizeof(pin_t); i++)
-                    writePin(p24g_led_pins[i], 0);
+                    gpio_write_pin(p24g_led_pins[i], 0);
 #endif
         }
     }

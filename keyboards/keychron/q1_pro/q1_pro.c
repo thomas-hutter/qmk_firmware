@@ -159,8 +159,8 @@ void keyboard_post_init_kb(void) {
     dip_switch_read(true);
 
 #ifdef KC_BLUETOOTH_ENABLE
-    setPinOutput(A9);
-    writePinLow(A9);
+    gpio_set_pin_output(A9);
+    gpio_write_pin_low(A9);
     /* IMPORTANT: DO NOT enable internal pull-up resistor
      * as there is an external pull-down resistor.
      */
@@ -170,8 +170,8 @@ void keyboard_post_init_kb(void) {
     bluetooth_init();
 
 #    ifdef ENCODER_ENABLE
-    pin_t encoders_pad_a[] = ENCODERS_PAD_A;
-    pin_t encoders_pad_b[] = ENCODERS_PAD_B;
+    pin_t encoders_pad_a[] = ENCODER_A_PINS;
+    pin_t encoders_pad_b[] = ENCODER_B_PINS;
     palEnableLineEvent(encoders_pad_a[0], PAL_EVENT_MODE_BOTH_EDGES);
     palEnableLineEvent(encoders_pad_b[0], PAL_EVENT_MODE_BOTH_EDGES);
     palSetLineCallback(encoders_pad_a[0], encoder0_pad_cb, NULL);
@@ -254,9 +254,9 @@ void ckbt51_default_ack_handler(uint8_t *data, uint8_t len) {
 void bluetooth_pre_task(void) {
     static uint8_t mode = 1;
 
-    if (readPin(USB_BT_MODE_SELECT_PIN) != mode) {
-        if (readPin(USB_BT_MODE_SELECT_PIN) != mode) {
-            mode = readPin(USB_BT_MODE_SELECT_PIN);
+    if (gpio_read_pin(USB_BT_MODE_SELECT_PIN) != mode) {
+        if (gpio_read_pin(USB_BT_MODE_SELECT_PIN) != mode) {
+            mode = gpio_read_pin(USB_BT_MODE_SELECT_PIN);
             set_transport(mode == 0 ? TRANSPORT_BLUETOOTH : TRANSPORT_USB);
         }
     }

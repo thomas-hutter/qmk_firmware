@@ -199,14 +199,14 @@ void transport_changed(transport_t new_transport) {
 
 #if defined(RGB_MATRIX_ENABLE) && defined(RGB_MATRIX_TIMEOUT)
 #    if (RGB_MATRIX_TIMEOUT > 0)
-    rgb_matrix_disable_timeout_set(RGB_MATRIX_TIMEOUT_INFINITE);
-    rgb_matrix_disable_time_reset();
+    indicator_set_backlit_timeout(RGB_MATRIX_TIMEOUT_INFINITE);
+    indicator_reset_backlit_time();
 #    endif
 #endif
 #if defined(LED_MATRIX_ENABLE) && defined(LED_MATRIX_TIMEOUT)
 #    if (LED_MATRIX_TIMEOUT > 0)
-    led_matrix_disable_timeout_set(LED_MATRIX_TIMEOUT_INFINITE);
-    led_matrix_disable_time_reset();
+    indicator_set_backlit_timeout(LED_MATRIX_TIMEOUT_INFINITE);
+    indicator_reset_backlit_time();
 #    endif
 #endif
 }
@@ -224,7 +224,7 @@ void usb_remote_wakeup(void) {
             /* Remote wakeup */
             if (suspend_wakeup_condition()
 #ifdef ENCODER_ENABLE
-                || encoder_read()
+                || encoder_task()
 #endif
                 ) {
                 usbWakeupHost(&USB_DRIVER);

@@ -169,7 +169,7 @@ static inline void enter_low_power_mode_prepare(void) {
     static pin_t dip_switch_pad[] = DIP_SWITCH_PINS;
 
     for (uint8_t i = 0; i < NUMBER_OF_DIP_SWITCHES; i++) {
-        setPinInputLow(dip_switch_pad[i]);
+        gpio_set_pin_input_low(dip_switch_pad[i]);
     }
 #endif
 }

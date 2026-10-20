@@ -67,36 +67,36 @@ bool keychron_task_kb(void) {
         if (timer_elapsed32(power_on_indicator_timer) > POWER_ON_LED_DURATION) {
             power_on_indicator_timer = 0;
 
-            if (!host_keyboard_led_state().caps_lock) writePin(LED_CAPS_LOCK_PIN, !LED_PIN_ON_STATE);
+            if (!host_keyboard_led_state().caps_lock) gpio_write_pin(LED_CAPS_LOCK_PIN, !LED_PIN_ON_STATE);
 #ifdef LK_WIRELESS_ENABLE
-            writePin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
-            writePin(COMMON_BT_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
-            writePin(COMMON_P24G_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
+            gpio_write_pin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
+            gpio_write_pin(COMMON_BT_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
+            gpio_write_pin(COMMON_P24G_LED_PIN, !COMMON_BT_LED_PIN_ON_STATE);
             if (get_transport() == TRANSPORT_USB) {
                 for (uint8_t i = 0; i < sizeof(bt_led_pins) / sizeof(pin_t); i++)
-                    writePin(bt_led_pins[i], !HOST_LED_PIN_ON_STATE);
+                    gpio_write_pin(bt_led_pins[i], !HOST_LED_PIN_ON_STATE);
                 for (uint8_t i = 0; i < sizeof(p24g_led_pins) / sizeof(pin_t); i++)
-                    writePin(p24g_led_pins[i], !HOST_LED_PIN_ON_STATE);
+                    gpio_write_pin(p24g_led_pins[i], !HOST_LED_PIN_ON_STATE);
             }
 #endif
         } else {
-            writePin(LED_CAPS_LOCK_PIN, LED_PIN_ON_STATE);
+            gpio_write_pin(LED_CAPS_LOCK_PIN, LED_PIN_ON_STATE);
 #ifdef LK_WIRELESS_ENABLE
-            writePin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
+            gpio_write_pin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
             switch (get_transport()) {
                 case TRANSPORT_P2P4:
-                    writePin(COMMON_P24G_LED_PIN, COMMON_BT_LED_PIN_ON_STATE);
+                    gpio_write_pin(COMMON_P24G_LED_PIN, COMMON_BT_LED_PIN_ON_STATE);
                     break;
                 case TRANSPORT_BLUETOOTH:
-                    writePin(COMMON_BT_LED_PIN, COMMON_BT_LED_PIN_ON_STATE);
+                    gpio_write_pin(COMMON_BT_LED_PIN, COMMON_BT_LED_PIN_ON_STATE);
                     break;
                 default:
-                    writePin(COMMON_P24G_LED_PIN, COMMON_BT_LED_PIN_ON_STATE);
-                    writePin(COMMON_BT_LED_PIN, COMMON_BT_LED_PIN_ON_STATE);
+                    gpio_write_pin(COMMON_P24G_LED_PIN, COMMON_BT_LED_PIN_ON_STATE);
+                    gpio_write_pin(COMMON_BT_LED_PIN, COMMON_BT_LED_PIN_ON_STATE);
                     for (uint8_t i = 0; i < sizeof(bt_led_pins) / sizeof(pin_t); i++)
-                        writePin(bt_led_pins[i], HOST_LED_PIN_ON_STATE);
+                        gpio_write_pin(bt_led_pins[i], HOST_LED_PIN_ON_STATE);
                     for (uint8_t i = 0; i < sizeof(p24g_led_pins) / sizeof(pin_t); i++)
-                        writePin(p24g_led_pins[i], HOST_LED_PIN_ON_STATE);
+                        gpio_write_pin(p24g_led_pins[i], HOST_LED_PIN_ON_STATE);
                     break;
             }
 #endif
@@ -128,11 +128,11 @@ bool wireless_pre_task_kb(void) {
     static uint32_t time             = 0;
 
     if (time == 0) {
-        uint8_t pins_state = (readPin(BT_MODE_SELECT_PIN) << 1)
+        uint8_t pins_state = (gpio_read_pin(BT_MODE_SELECT_PIN) << 1)
 #        ifdef P2P4_MODE_SELECT_PIN
-                             | readPin(P2P4_MODE_SELECT_PIN)
+                             | gpio_read_pin(P2P4_MODE_SELECT_PIN)
 #        elif defined(USB_MODE_SELECT_PIN)
-                             | readPin(USB_MODE_SELECT_PIN)
+                             | gpio_read_pin(USB_MODE_SELECT_PIN)
 #        endif
             ;
 
@@ -143,11 +143,11 @@ bool wireless_pre_task_kb(void) {
     }
 
     if ((time && timer_elapsed32(time) > 100) || get_transport() == TRANSPORT_NONE) {
-        uint8_t pins_state = (readPin(BT_MODE_SELECT_PIN) << 1)
+        uint8_t pins_state = (gpio_read_pin(BT_MODE_SELECT_PIN) << 1)
 #        ifdef P2P4_MODE_SELECT_PIN
-                             | readPin(P2P4_MODE_SELECT_PIN)
+                             | gpio_read_pin(P2P4_MODE_SELECT_PIN)
 #        elif defined(USB_MODE_SELECT_PIN)
-                             | readPin(USB_MODE_SELECT_PIN)
+                             | gpio_read_pin(USB_MODE_SELECT_PIN)
 #        endif
             ;
 
@@ -188,7 +188,7 @@ void wireless_pre_task(void) {
     static uint32_t time             = 0;
 
     if (time == 0) {
-        uint8_t pins_state = (readPin(BT_MODE_SELECT_PIN) << 1);
+        uint8_t pins_state = (gpio_read_pin(BT_MODE_SELECT_PIN) << 1);
 
         if (pins_state != dip_switch_state) {
             dip_switch_state = pins_state;
@@ -197,7 +197,7 @@ void wireless_pre_task(void) {
     }
 
     if ((time && timer_elapsed32(time) > 100) || get_transport() == TRANSPORT_NONE) {
-        uint8_t pins_state = (readPin(BT_MODE_SELECT_PIN) << 1);
+        uint8_t pins_state = (gpio_read_pin(BT_MODE_SELECT_PIN) << 1);
 
         if (pins_state == dip_switch_state) {
             time = 0;

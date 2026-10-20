@@ -114,8 +114,6 @@ struct rgb_matrix_limits_t rgb_matrix_get_limits(uint8_t iter);
 #define RGB_MATRIX_TEST_LED_FLAGS() \
     if (!HAS_ANY_FLAGS(g_led_config.flags[i], params->flags)) continue
 
-#define RGB_MATRIX_TIMEOUT_INFINITE (UINT32_MAX)
-
 enum rgb_matrix_effects {
     RGB_MATRIX_NONE = 0,
 
@@ -165,15 +163,10 @@ int rgb_matrix_led_index(int index);
 
 void rgb_matrix_set_color(int index, uint8_t red, uint8_t green, uint8_t blue);
 void rgb_matrix_set_color_all(uint8_t red, uint8_t green, uint8_t blue);
-void rgb_matrix_region_set_color(uint8_t region, int index, uint8_t red, uint8_t green, uint8_t blue);
-void rgb_matrix_region_set_color_all(uint8_t region, uint8_t red, uint8_t green, uint8_t blue);
 
 void rgb_matrix_handle_key_event(uint8_t row, uint8_t col, bool pressed);
 
 void rgb_matrix_task(void);
-
-void rgb_matrix_none_indicators_kb(void);
-void rgb_matrix_none_indicators_user(void);
 
 // This runs after another backlight effect and replaces
 // colors already set

@@ -74,7 +74,7 @@ void battery_init(void) {
 
 #ifdef BAT_ADC_ENABLE_PIN
     palSetLineMode(BAT_ADC_ENABLE_PIN, PAL_MODE_OUTPUT_PUSHPULL);
-    writePin(BAT_ADC_ENABLE_PIN, 1);
+    gpio_write_pin(BAT_ADC_ENABLE_PIN, 1);
 #endif
 #ifdef BAT_ADC_PIN
     palSetLineMode(BAT_ADC_PIN, PAL_MODE_INPUT_ANALOG);
@@ -84,7 +84,7 @@ void battery_init(void) {
 void battery_stop(void) {
 #if (HAL_USE_ADC)
 #    ifdef BAT_ADC_ENABLE_PIN
-    writePin(BAT_ADC_ENABLE_PIN, 0);
+    gpio_write_pin(BAT_ADC_ENABLE_PIN, 0);
 #    endif
 #    ifdef BAT_ADC_PIN
     palSetLineMode(BAT_ADC_PIN, PAL_MODE_INPUT_ANALOG);
@@ -193,7 +193,7 @@ void battery_task(void) {
     if ((get_transport() & TRANSPORT_WIRELESS) && (wireless_get_state() == WT_CONNECTED || battery_power_on_sample())) {
 #if defined(BAT_CHARGING_PIN)
         if (usb_power_connected() && t > VOLTAGE_MEASURE_INTERVAL) {
-            if (readPin(BAT_CHARGING_PIN) == BAT_CHARGING_LEVEL)
+            if (gpio_read_pin(BAT_CHARGING_PIN) == BAT_CHARGING_LEVEL)
                 lkbt51_update_bat_state(BAT_CHARGING);
             else
                 lkbt51_update_bat_state(BAT_FULL_CHARGED);

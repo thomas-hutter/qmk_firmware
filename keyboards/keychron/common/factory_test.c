@@ -118,7 +118,7 @@ static inline void factory_timer_check(void) {
             clear_keyboard(); // Avoid key being pressed after NKRO state changed
             layer_state_t default_layer_tmp = default_layer_state;
             eeconfig_init();
-            keymap_config.raw = eeconfig_read_keymap();
+            eeconfig_read_keymap(&keymap_config);
             default_layer_set(default_layer_tmp);
 #ifdef DYNAMIC_DEBOUNCE_ENABLE
             debounce_config_reset();
@@ -382,13 +382,13 @@ void factory_test_rx(uint8_t *data, uint8_t length) {
                     /* Set INT state */
                     case 0xA2:
                         kc_printf("pin %d\n\r", data[3]);
-                        writePin(BLUETOOTH_INT_OUTPUT_PIN, data[3]);
+                        gpio_write_pin(BLUETOOTH_INT_OUTPUT_PIN, data[3]);
                         break;
                         /* Report INT state */
                         //                    case 0xA3:
                         //                        payload[len++] = FACTORY_TEST_CMD_INT_PIN;
                         //                        payload[len++] = 0xA3;
-                        //                        payload[len++] = readPin(LKBT51_INT_INPUT_PIN);
+                        //                        payload[len++] = gpio_read_pin(LKBT51_INT_INPUT_PIN);
                         //                        factory_test_send(payload, len);
                         //                        break;
                 }
@@ -396,7 +396,7 @@ void factory_test_rx(uint8_t *data, uint8_t length) {
             case FACTORY_TEST_CMD_GET_TRANSPORT:
                 payload[len++] = FACTORY_TEST_CMD_GET_TRANSPORT;
                 payload[len++] = get_transport();
-                payload[len++] = readPin(USB_POWER_SENSE_PIN);
+                payload[len++] = gpio_read_pin(USB_POWER_SENSE_PIN);
                 factory_test_send(payload, len);
                 break;
 #endif

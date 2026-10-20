@@ -42,43 +42,43 @@ static void HC595_output(uint32_t data) {
     uint8_t n = 1;
 
     for (i = 0; i < (MATRIX_COLS + 3); i++) {
-        writePinLow(HC595_SHCP);
+        gpio_write_pin_low(HC595_SHCP);
 
         if (data & 0x1)
-            writePinHigh(HC595_DS);
+            gpio_write_pin_high(HC595_DS);
         else
-            writePinLow(HC595_DS);
+            gpio_write_pin_low(HC595_DS);
 
         data >>= 1;
 
         HC595_delay(n);
 
-        writePinHigh(HC595_SHCP);
+        gpio_write_pin_high(HC595_SHCP);
         HC595_delay(n);
     }
 
     HC595_delay(n);
-    writePinLow(HC595_STCP);
+    gpio_write_pin_low(HC595_STCP);
     HC595_delay(n);
-    writePinHigh(HC595_STCP);
+    gpio_write_pin_high(HC595_STCP);
 }
 
 static inline void setPinOutput_writeLow(pin_t pin) {
     ATOMIC_BLOCK_FORCEON {
-        setPinOutput(pin);
-        writePinLow(pin);
+        gpio_set_pin_output(pin);
+        gpio_write_pin_low(pin);
     }
 }
 
 static inline void setPinInput_high(pin_t pin) {
     ATOMIC_BLOCK_FORCEON {
-        setPinInputHigh(pin);
+        gpio_set_pin_input_high(pin);
     }
 }
 
 static inline uint8_t readMatrixPin(pin_t pin) {
     if (pin != NO_PIN) {
-        return readPin(pin);
+        return gpio_read_pin(pin);
     } else {
         return 1;
     }
@@ -263,9 +263,9 @@ void matrix_read_rows_on_col(matrix_row_t current_matrix[], uint8_t current_col)
 }
 
 void matrix_init_custom(void) {
-    setPinOutput(HC595_DS);
-    setPinOutput(HC595_STCP);
-    setPinOutput(HC595_SHCP);
+    gpio_set_pin_output(HC595_DS);
+    gpio_set_pin_output(HC595_STCP);
+    gpio_set_pin_output(HC595_SHCP);
 
     for (uint8_t x = 0; x < MATRIX_ROWS; x++) {
         if (row_pins[x] != NO_PIN) {

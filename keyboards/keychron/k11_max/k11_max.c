@@ -45,7 +45,7 @@ void keyboard_post_init_kb(void) {
     palSetLineMode(P2P4_MODE_SELECT_PIN, PAL_MODE_INPUT);
     palSetLineMode(BT_MODE_SELECT_PIN, PAL_MODE_INPUT);
 
-    writePin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
+    gpio_write_pin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
     lkbt51_init(false);
     wireless_init();
 #endif
@@ -63,12 +63,12 @@ bool keychron_task_kb(void) {
             power_on_indicator_timer = 0;
 
 #ifdef LK_WIRELESS_ENABLE
-            writePin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
+            gpio_write_pin(BAT_LOW_LED_PIN, !BAT_LOW_LED_PIN_ON_STATE);
 #endif
 
         } else {
 #ifdef LK_WIRELESS_ENABLE
-            writePin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
+            gpio_write_pin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
 #endif
         }
     }

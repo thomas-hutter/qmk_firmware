@@ -294,13 +294,13 @@ void factory_test_rx(uint8_t *data, uint8_t length) {
                         break;
                     /* Set INT state */
                     case 0xA2:
-                        writePin(CKBT51_INT_INPUT_PIN, data[3]);
+                        gpio_write_pin(CKBT51_INT_INPUT_PIN, data[3]);
                         break;
                     /* Report INT state */
                     case 0xA3:
                         payload[len++] = FACTORY_TEST_CMD_INT_PIN;
                         payload[len++] = 0xA3;
-                        payload[len++] = readPin(BLUETOOTH_INT_INPUT_PIN);
+                        payload[len++] = gpio_read_pin(BLUETOOTH_INT_INPUT_PIN);
                         factory_test_send(payload, len);
                         break;
                 }
@@ -308,7 +308,7 @@ void factory_test_rx(uint8_t *data, uint8_t length) {
             case FACTORY_TEST_CMD_GET_TRANSPORT:
                 payload[len++] = FACTORY_TEST_CMD_GET_TRANSPORT;
                 payload[len++] = get_transport();
-                payload[len++] = readPin(USB_POWER_SENSE_PIN);
+                payload[len++] = gpio_read_pin(USB_POWER_SENSE_PIN);
                 factory_test_send(payload, len);
                 break;
 #endif

@@ -46,6 +46,11 @@ extern report_keyboard_t *keyboard_report;
 #ifdef NKRO_ENABLE
 extern report_nkro_t *nkro_report;
 #    ifdef APDAPTIVE_NKRO_ENABLE
+enum {
+    KB_RPT_STD  = 1 << 0,
+    KB_RPT_NKRO = 1 << 1,
+};
+
 extern uint8_t kb_report_changed;
 extern uint8_t kb_keys_count;
 extern uint8_t nkro_bit_count;

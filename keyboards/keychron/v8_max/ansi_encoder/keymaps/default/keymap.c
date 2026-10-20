@@ -22,7 +22,6 @@
 #include "features/achordion.h"
 #endif  // ACHORDION_ENABLE
 #ifdef LAYER_LOCK_ENABLE
-#include "features/layer_lock.h"
 #endif  // LAYER_LOCK_ENABLE
 #ifdef SELECT_WORD_ENABLE
 #include "features/select_word.h"
@@ -158,7 +157,7 @@ static bool layer_was_on_NAV_b = false;
 // *************************************************************************************
 // CUSTOM KEYCODES
 // *************************************************************************************
-enum custom_keycodes {
+enum keymap_keycodes {
   CKC_ASTR = SAFE_RANGE,
   CKC_MYWORKUSER,
   CKC_EMAIL,
@@ -178,6 +177,8 @@ enum custom_keycodes {
   CKC_SWBK,
   CKC_SWFD,
 };
+
+#define CKC_LLCK QK_LAYER_LOCK
 
 // *************************************************************************************
 // COMBOS
@@ -211,7 +212,7 @@ const key_override_t euro_override = ko_make_basic(MOD_MASK_SHIFT, DE_EURO, DE_D
 // const key_override_t P6_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_P6, S(DE_F));
 
 // This globally defines all key overrides to be used
-const key_override_t **key_overrides = (const key_override_t *[]){
+const key_override_t *key_overrides[] = {
 	&delete_key_override,
   &quot_key_override,
   &astr_key_override,
@@ -504,7 +505,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______,            _______,          CKC_LLCK, CKC_LLCK,                DE_DOT,            DE_COMM,           KC_SPC,                       _______,  _______,   _______),    
 
     [FUN] = LAYOUT_ansi_69(       
-        _______, KC_F1,    KC_F2,    KC_F3,   KC_F4,   KC_F5, KC_F6,                KC_F7,    KC_F8,    KC_F9,   KC_F10,   KC_F11,    KC_F12,            _______,             RGB_TOG,
+        _______, KC_F1,    KC_F2,    KC_F3,   KC_F4,   KC_F5, KC_F6,                KC_F7,    KC_F8,    KC_F9,   KC_F10,   KC_F11,    KC_F12,            _______,             RM_TOGG,
         _______, KC_F12,   KC_F9,    KC_F8,   KC_F7,   XXXXXXX,                     TG(FUN),  _______,  _______, _______,  _______,   _______,  _______,  _______,             _______,
         _______, KC_F10,   KC_F3,    KC_F2,   KC_F1,   XXXXXXX,                     _______,  _______,  _______, KC_RSFT,  _______,   _______,            _______,             _______,
         KC_F11,            KC_F6,    KC_F5,   KC_F4,   XXXXXXX, _______,    _______,_______,  _______,  _______, _______,  _______,   _______,                     _______,
@@ -525,17 +526,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        _______, _______,            _______,      TG(WIN_FN1), TG(WIN_FN1),          TG(WIN_FN1),            DE_MINS,           _______,                       _______, _______,   _______),
       
     // [SYML] = LAYOUT_ansi_69(       
-    //      _______, DE_EXLM,  DE_DQUO,  DE_EURO, DE_DLR,  DE_PERC, DE_SECT,            _______,  _______,  _______, _______,  _______,  _______,            _______,             RGB_TOG,
+    //      _______, DE_EXLM,  DE_DQUO,  DE_EURO, DE_DLR,  DE_PERC, DE_SECT,            _______,  _______,  _______, _______,  _______,  _______,            _______,             RM_TOGG,
     //      _______, CKC_CIRC, DE_LABK,  DE_MINS, DE_RABK, DE_PIPE,                     _______,  _______,  _______, _______,  _______,  _______,  _______,  _______,             _______,
     //      _______, DE_TILD,  DE_SS,    DE_PLUS, LTEQL,   DE_AMPR,                     _______,  _______,  _______, KC_RSFT, _______,  _______,            _______,             _______,
     //      _______,           XXXXXXX,  CKC_GRV,  DE_BSLS, DE_SLSH, DE_MICR,            _______,  _______,  _______, _______,  _______,  _______,  _______,           _______,
     //      _______, _______,            _______,      TG(WIN_FN1), TG(WIN_FN1),        _______,           _______,           _______,                       _______, _______,   _______),
            
     [WIN_FN1] = LAYOUT_ansi_69(       
-      KC_ESC,  KC_BRID,  KC_BRIU,  KC_TASK, KC_FILE, RGB_VAD, RGB_VAI,            KC_MPRV,  KC_MPLY,  KC_MNXT, KC_MUTE,  KC_VOLD,  KC_VOLU,            _______,             RGB_TOG,
+      KC_ESC,  KC_BRID,  KC_BRIU,  KC_TASK, KC_FILE, RM_VALD, RM_VALU,            KC_MPRV,  KC_MPLY,  KC_MNXT, KC_MUTE,  KC_VOLD,  KC_VOLU,            _______,             RM_TOGG,
       _______, BT_HST1,  BT_HST2,  BT_HST3, P2P4G,   _______,                     _______,  _______,  _______, _______,  _______,  _______,  _______,  _______,             QK_BOOT,
-      RGB_TOG, RGB_MOD,  RGB_VAI,  RGB_HUD, RGB_SAI, RGB_SPI,                     _______,  _______,  _______, _______,  _______,  _______,            _______,             KC_END,
-      _______,           RGB_RMOD, RGB_VAD, RGB_HUI, RGB_SAD, RGB_SPD,            RGB_SPD,  NK_TOGG,  _______, _______,  _______,  _______,  _______,            _______,
+      RM_TOGG, RM_NEXT,  RM_VALU,  RM_HUED, RM_SATU, RM_SPDU,                     _______,  _______,  _______, _______,  _______,  _______,            _______,             KC_END,
+      _______,           RM_PREV, RM_VALD, RM_HUEU, RM_SATD, RM_SPDD,            RM_SPDD,  NK_TOGG,  _______, _______,  _______,  _______,  _______,            _______,
       _______, _______,            _______,          TG(WIN_FN1), TG(WIN_FN1),            _______,            _______,           _______,                      _______,  _______,   _______),
        
 };
@@ -545,7 +546,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
     [MAC_BASE] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN)},
     [WIN_BASE] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN)},
-    [WIN_FN1] = {ENCODER_CCW_CW(RGB_VAD, RGB_VAI)},
+    [WIN_FN1] = {ENCODER_CCW_CW(RM_VALD, RM_VALU)},
     [NUM] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN)},
     [FUN] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN)},
     [NAV] = {ENCODER_CCW_CW(KC_PGUP, KC_PGDN)},
@@ -916,10 +917,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     #ifdef ACHORDION_ENABLE
       if (!process_achordion(keycode, record)) { return false; }
     #endif  // ACHORDION_ENABLE
-    
-    #ifdef LAYER_LOCK_ENABLE
-      if (!process_layer_lock(keycode, record, CKC_LLCK)) { return false; }
-    #endif  // LAYER_LOCK_ENABLE
     
     #ifdef USER_NUM_WORD_ENABLE
       if (!process_record_num_word(keycode, record)) { return false; }

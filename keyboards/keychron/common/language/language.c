@@ -16,6 +16,7 @@
 
 #include <string.h>
 #include "eeconfig_kb.h"
+#include "eeprom.h"
 #include "raw_hid.h"
 #include "eeconfig.h"
 #include "matrix.h"
@@ -25,7 +26,7 @@
 static uint8_t lang;
 
 static bool language_get(uint8_t *data) {
-     eeprom_read_block(&lang, (uint8_t *)(EECONFIG_BASE_LANGUAGE), sizeof(lang));
+    eeprom_read_block(&lang, (uint8_t *)(EECONFIG_BASE_LANGUAGE), sizeof(lang));
     data[1] = lang;
 
     return true;

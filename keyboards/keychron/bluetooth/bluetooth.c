@@ -96,14 +96,14 @@ void bluetooth_init(void) {
 #endif
     indicator_init();
 #ifdef BLUETOOTH_INT_INPUT_PIN
-    setPinInputHigh(BLUETOOTH_INT_INPUT_PIN);
+    gpio_set_pin_input_high(BLUETOOTH_INT_INPUT_PIN);
 #endif
 
     lpm_init();
     rtc_timer_init();
 
 #ifdef BLUETOOTH_NKRO_ENABLE
-    keymap_config.raw = eeconfig_read_keymap();
+    eeconfig_read_keymap(&keymap_config);
     nkro.bluetooth    = keymap_config.nkro;
 #endif
 }

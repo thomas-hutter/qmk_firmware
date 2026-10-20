@@ -42,7 +42,7 @@ void keyboard_post_init_kb(void) {
     palSetLineMode(P2P4_MODE_SELECT_PIN, PAL_MODE_INPUT);
     palSetLineMode(BT_MODE_SELECT_PIN, PAL_MODE_INPUT);
 
-    writePin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
+    gpio_write_pin(BAT_LOW_LED_PIN, BAT_LOW_LED_PIN_ON_STATE);
     lkbt51_init(false);
     wireless_init();
 #endif
@@ -56,9 +56,9 @@ void keyboard_post_init_kb(void) {
 
 bool keychron_task_kb(void) {
     if (factory_reset_indicating()) {
-        writePin(LED_CAPS_LOCK_PIN, !LED_PIN_ON_STATE);
+        gpio_write_pin(LED_CAPS_LOCK_PIN, !LED_PIN_ON_STATE);
     } else {
-        if (host_keyboard_led_state().caps_lock) writePin(LED_CAPS_LOCK_PIN, LED_PIN_ON_STATE);
+        if (host_keyboard_led_state().caps_lock) gpio_write_pin(LED_CAPS_LOCK_PIN, LED_PIN_ON_STATE);
     }
     return true;
 }
