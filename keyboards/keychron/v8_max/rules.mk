@@ -15,13 +15,6 @@ ifeq ($(strip $(USER_NUM_WORD_ENABLE)), yes)
 	OPT_DEFS += -DUSER_NUM_WORD_ENABLE
 endif
 
-ACHORDION_ENABLE ?= yes
-ifeq ($(strip $(ACHORDION_ENABLE)), yes)
-	OPT_DEFS += -DACHORDION_ENABLE
-	SRC += features/achordion.c
-endif
-
-
 
 SELECT_WORD_ENABLE ?= yes
 ifeq ($(strip $(SELECT_WORD_ENABLE)), yes)

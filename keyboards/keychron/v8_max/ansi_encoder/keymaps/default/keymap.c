@@ -18,11 +18,6 @@
 #include "keychron_common.h"
 #include "sendstring_german.h"
 
-#ifdef ACHORDION_ENABLE
-#include "features/achordion.h"
-#endif  // ACHORDION_ENABLE
-#ifdef LAYER_LOCK_ENABLE
-#endif  // LAYER_LOCK_ENABLE
 #ifdef SELECT_WORD_ENABLE
 #include "features/select_word.h"
 #endif  // SELECT_WORD_ENABLE
@@ -397,86 +392,39 @@ void leader_end_user(void) {
 
 
 // *************************************************************************************
-// Achordion (https://getreuer.info/posts/keyboards/achordion)
+// Chordal hold / flow tap configuration (https://docs.qmk.fm/chordal_hold)
 // *************************************************************************************
-#ifdef ACHORDION_ENABLE
-uint16_t achordion_timeout(uint16_t tap_hold_keycode) {
-
-  switch (tap_hold_keycode) {
-        case DE_UDIAU:
-        case DE_ADIAA:
-        // case MAGICM:
-        // case MAGICL:
-        case MAGICO:
-        case DE_ADIA:
-        case DE_ODIA:
-        case DE_UDIA:
-        case DE_SSS:
-        case DE_XEX:
-        case HOMEND:
-        case DE_1F:
-        case DE_2F:
-        case DE_3F:
-        case DE_4F:
-        case DE_5F:
-        case DE_6F:
-        case DE_7F:
-        case DE_8F:
-        case DE_9F:
-        case DE_0F:
-        // case DE_LABKF:
-        case DE_HASHF:
-        case DE_QQU:
-        case DE_YOU:
-        case LTEQL:
-        // case TABENT:
-        case XTAB:
-        case MAGICF:
-        // case HOME_T:
-        // case HOME_I:
-        case FINDF:
-        case CPYCT:
-        case PSTWOF:
-        case UNREDO:
-        case BKMKMF:
-        case OSM_LS:
-        case OSM_RS:
-        // case SYMR_C:
-        // case SYML_H:
-          return 0; 
-        default:
-          return ACHORDION_TIMEOUT;  
-  }
-}
-
-bool achordion_eager_mod(uint8_t mod) {
-  switch (mod) {
-    case MOD_LSFT:
-    case MOD_RSFT:
-    case MOD_LCTL:
-    case MOD_RCTL:
-      return true;  // Eagerly apply Shift and Ctrl mods.
-
-    default:
-      return false;
-  }
-}
-
-// Returns true if `pos` on the left hand of the keyboard, false if right.
+// Returns 'L' if `pos` on the left hand of the keyboard, 'R' if right.
 // checked against matrix, leftmost keys of right half are col 7
-static bool my_on_left_hand(keypos_t pos) {
-  return pos.col < 7;
+char chordal_hold_handedness(keypos_t pos) {
+  return pos.col < 7 ? 'L' : 'R';
 }
 
-bool achordion_chord(uint16_t tap_hold_keycode,
-                     keyrecord_t* tap_hold_record,
-                     uint16_t other_keycode,
-                     keyrecord_t* other_record) {
-  return my_on_left_hand(tap_hold_record->event.key) !=
-         my_on_left_hand(other_record->event.key);
+bool is_flow_tap_key(uint16_t keycode) {
+    if ((get_mods() & (MOD_MASK_CG | MOD_BIT_LALT)) != 0) {
+        return false; // Disable Flow Tap on hotkeys.
+    }
+
+    switch (get_tap_keycode(keycode)) {
+        case DE_O:
+        case MAGICO:
+        case DE_U:
+        case DE_UDIA:
+            return false;
+    }
+
+    switch (get_tap_keycode(keycode)) {
+        case KC_SPC:
+        case KC_A ... KC_Z:
+        case KC_DOT:
+        case KC_COMM:
+        case KC_SCLN:
+        case KC_SLSH:
+            return true;
+    }
+    return false;
 }
 
-#endif  // ACHORDION_ENABLE
 
 // KC_BSPC LS_X KC_PGUP KC_PGDN
 // clang-format off   

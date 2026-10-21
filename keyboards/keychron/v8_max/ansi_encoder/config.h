@@ -73,10 +73,12 @@
 #define TAP_CODE_DELAY 5
 
 #define PERMISSIVE_HOLD
+#define CHORDAL_HOLD
+#define SPECULATIVE_HOLD
+#define FLOW_TAP_TERM 200
+
 // #define QUICK_TAP_TERM_PER_KEY
 
-#define ACHORDION_STREAK
-#define ACHORDION_TIMEOUT 500
 
 // #define CAPS_WORD_INVERT_ON_SHIFT // Holding Shift while Caps Word is active inverts the shift state.
 #define CAPS_WORD_IDLE_TIMEOUT 5000 // When idle, turn off Caps Word after 5 seconds.
