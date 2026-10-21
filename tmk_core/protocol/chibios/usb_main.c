@@ -28,6 +28,16 @@
 #include "usb_driver.h"
 #include "usb_types.h"
 
+#if defined(BOARD_OTG_NOVBUSSENS) && defined(STM32_OTG_STEPPING) && \
+    STM32_OTG_STEPPING == 1
+// ChibiOS' STM32 OTGv1 driver enables VBUS sensing when connecting the bus,
+// even though this board needs PA9 to remain available as a GPIO input.
+#    undef usb_lld_connect_bus
+#    define usb_lld_connect_bus(usbp)
+#    undef usb_lld_disconnect_bus
+#    define usb_lld_disconnect_bus(usbp)
+#endif
+
 #ifdef RAW_ENABLE
 #    include "raw_hid.h"
 #endif
