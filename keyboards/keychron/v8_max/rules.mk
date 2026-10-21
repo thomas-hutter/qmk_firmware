@@ -8,6 +8,8 @@ KEY_OVERRIDE_ENABLE = yes
 DEFERRED_EXEC_ENABLE = yes
 REPEAT_KEY_ENABLE = yes
 LEADER_ENABLE = yes
+LAYER_LOCK_ENABLE = yes
+
 
 ifeq ($(strip $(USER_NUM_WORD_ENABLE)), yes)
 	OPT_DEFS += -DUSER_NUM_WORD_ENABLE
@@ -19,10 +21,7 @@ ifeq ($(strip $(ACHORDION_ENABLE)), yes)
 	SRC += features/achordion.c
 endif
 
-LAYER_LOCK_ENABLE ?= yes
-ifeq ($(strip $(LAYER_LOCK_ENABLE)), yes)
-	OPT_DEFS += -DLAYER_LOCK_ENABLE
-endif
+
 
 SELECT_WORD_ENABLE ?= yes
 ifeq ($(strip $(SELECT_WORD_ENABLE)), yes)
