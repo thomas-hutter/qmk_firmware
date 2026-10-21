@@ -123,19 +123,33 @@ void keychron_wireless_common_task(void) {
 void wireless_pre_task(void) {
     static uint8_t  mode = 0;
     static uint32_t time = 0;
+    static uint32_t debug_time = 0;
+
+    uint8_t bt_mode_pin   = gpio_read_pin(BT_MODE_SELECT_PIN);
+    uint8_t p2p4_mode_pin = gpio_read_pin(P2P4_MODE_SELECT_PIN);
+
+#ifdef CONSOLE_ENABLE
+    if (debug_time == 0 || timer_elapsed32(debug_time) >= 1000) {
+        dprintf("mode pins: A9(BT)=%u A10(P2P4)=%u mode=%u transport=%u\n", bt_mode_pin, p2p4_mode_pin, (bt_mode_pin << 1) | p2p4_mode_pin, get_transport());
+        debug_time = timer_read32();
+    }
+#endif
 
     if (time == 0) {
-        if ((gpio_read_pin(BT_MODE_SELECT_PIN) << 1 | gpio_read_pin(P2P4_MODE_SELECT_PIN)) != mode) {
-            mode = gpio_read_pin(BT_MODE_SELECT_PIN) << 1 | gpio_read_pin(P2P4_MODE_SELECT_PIN);
+        if (((bt_mode_pin << 1) | p2p4_mode_pin) != mode) {
+            mode = (bt_mode_pin << 1) | p2p4_mode_pin;
             time = timer_read32();
         }
     }
 
     if ((time && timer_elapsed32(time) > 100) || get_transport() == TRANSPORT_NONE) {
-        if ((gpio_read_pin(BT_MODE_SELECT_PIN) << 1 | gpio_read_pin(P2P4_MODE_SELECT_PIN)) == mode) {
+        if (((bt_mode_pin << 1) | p2p4_mode_pin) == mode) {
             time = 0;
 
             switch (mode) {
+                case 0x00:
+                    set_transport(TRANSPORT_USB);
+                    break;
                 case 0x01:
                     set_transport(TRANSPORT_BLUETOOTH);
                     break;
@@ -149,7 +163,7 @@ void wireless_pre_task(void) {
                     break;
             }
         } else {
-            mode = gpio_read_pin(BT_MODE_SELECT_PIN) << 1 | gpio_read_pin(P2P4_MODE_SELECT_PIN);
+            mode = (bt_mode_pin << 1) | p2p4_mode_pin;
             time = timer_read32();
         }
     }
