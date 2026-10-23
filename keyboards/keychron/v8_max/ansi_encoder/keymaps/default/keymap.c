@@ -860,13 +860,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // We use require_prior_idle_timer == 0 to indicate that the timer is inactive, so
     // the value is bitwise or'd with 1 to ensure it is nonzero.
     // require_prior_idle_timer = (record->event.time + REQUIRE_PRIOR_IDLE_TIMEOUT) | 1;
-    #ifdef ACHORDION_ENABLE
-      if (!process_achordion(keycode, record)) { return false; }
-    #endif  // ACHORDION_ENABLE
-    
-    #ifdef USER_NUM_WORD_ENABLE
-      if (!process_record_num_word(keycode, record)) { return false; }
-    #endif // USER_NUM_WORD_ENABLE
 
     #ifdef SELECT_WORD_ENABLE
       if (!process_select_word(keycode, record)) { return false; }
@@ -1104,12 +1097,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 void matrix_scan_user(void) {
-    #ifdef ACHORDION_ENABLE
-    achordion_task();
-    #endif  // ACHORDION_ENABLE
-    #ifdef LAYER_LOCK_ENABLE
-    layer_lock_task();
-    #endif  // LAYER_LOCK_ENABLE
+
     #ifdef SELECT_WORD_ENABLE
       select_word_task();
     #endif  // SELECT_WORD_ENABLE

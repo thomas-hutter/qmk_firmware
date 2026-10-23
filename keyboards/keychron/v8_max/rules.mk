@@ -2,18 +2,12 @@ include keyboards/keychron/common/wireless/wireless.mk
 include keyboards/keychron/common/keychron_common.mk
 
 CAPS_WORD_ENABLE = yes
-USER_NUM_WORD_ENABLE = no
 COMBO_ENABLE = yes
 KEY_OVERRIDE_ENABLE = yes
 DEFERRED_EXEC_ENABLE = yes
 REPEAT_KEY_ENABLE = yes
 LEADER_ENABLE = yes
 LAYER_LOCK_ENABLE = yes
-
-
-ifeq ($(strip $(USER_NUM_WORD_ENABLE)), yes)
-	OPT_DEFS += -DUSER_NUM_WORD_ENABLE
-endif
 
 
 SELECT_WORD_ENABLE ?= yes
